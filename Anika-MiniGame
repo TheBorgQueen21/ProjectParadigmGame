@@ -2,4 +2,8 @@
 ### Date: July 3, 2020
 ### Title: Practice for Minigame
 
+<<<<<<< HEAD
 print ("Hello World, this is Anika!")
+=======
+print("testing testing 123")
+>>>>>>> 2f2fecf6f500a955b9bb4bbef18547c884521f43
