@@ -2,5 +2,24 @@
 ### Date: July 3, 2020
 ### Title: Practice for Minigame
 
+from pygame import *
+SCREENWIDTH = 900
+SCREENHEIGHT = 600
+SCREEN = display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 
-print("I am going to start learning how to create pong :)")
+WHITE = (255, 255, 255)
+BGCOLOR = (0, 220, 160)
+BLUE = (50, 100, 230)
+RED = (230, 50, 100)
+
+running = True
+myClock = time.Clock()
+while running:
+    for evt in event.get():
+        if evt.type == QUIT:
+            runnung = False
+        SCREEN.fill(BGCOLOR)
+
+        display.flip()
+        myClock.tick(60)
+quit()
