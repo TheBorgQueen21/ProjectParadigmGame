@@ -1,5 +1,16 @@
 ### File Owner: Anika
 ### Date: July 7, 2020
-### File: Second Mini Game
+### File: Second Mini Game (space invader)
 
+#initialize the pygame
+import pygame
+pygame.init ()
 
+#create the screen
+screen = pygame.display.set_mode((800, 600))
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pyagme.QUIT:
+            running = False
