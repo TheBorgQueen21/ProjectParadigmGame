@@ -6,10 +6,15 @@
 
 #initialize the pygame
 import pygame
+import random
 pygame.init ()
 
 #create the screen
 screen = pygame.display.set_mode((800, 600))
+
+# background
+#background = pygame.image.load('Yellow_Background.png')
+background = pygame.image.load("Yellow_Background.png").convert()
 
 #Title and Icon
 pygame.display.set_caption("Project Paradigm")
@@ -19,27 +24,55 @@ pygame.display.set_icon(icon)
 #Player
 playerImg = pygame.image.load('heart.png')
 playerX = 370
-playerX_change  = 0
 playerY = 480
-playerY_change = 0
+playerX_change = 0
 
-def player():
-    screen.blit(playerImg, (playerX, playerY))#draws the player on the screen
+#Enemy
+EnemyImg = pygame.image.load('broken-heart.png')
+EnemyX = random.randint(0, 800)
+EnemyY = 50
+EnemyX_change  = 0.3
+EnemyY_change = 40
 
+def player(x, y):
+    screen.blit(playerImg, (x, y)) #draws the player on the screen
+
+def Enemy(x, y):
+    screen.blit(EnemyImg, (x, y))
 
 #Game Loop (allows user to exit)
 running = True
 while running: #anything you want to appear continuously must go inside this while loop
-    screen.fill((150, 50, 150)) #rgb value
+    screen.fill((150, 50, 250)) #rgb value
+    #background image
+    screen.blit(background, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         #if keystroke pressed, check if right or left
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.1
+                playerX_change = -0.3
             if event.key == pygame.K_RIGHT:
-                playerX_change =  0.1
+                playerX_change = 0.3
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                playerX_change = 0
+    #checking player's sprite boundries
     playerX += playerX_change
-    player() #must be after fill method bc it wont be overwritten by the background
+    if playerX <= 0:
+        playerX = 0
+    elif playerX >= 736: #subtract the size of sprite from the side (800 pixels)
+        playerX = 736
+    #checking enemy movement
+    EnemyX += EnemyX_change
+    if EnemyX <= 0:
+        EnemyX_changeX = 0.3
+        EnemyY += EnemyY_change
+    elif EnemyX >= 736:
+        EnemyX_change = -0.3
+        EnemyY += EnemyY_change
+
+    player(playerX, playerY) #must be after fill method bc it wont be overwritten by the background
+    Enemy(EnemyX, EnemyY)
     pygame.display.update()
