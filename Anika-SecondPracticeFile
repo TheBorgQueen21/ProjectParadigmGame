@@ -30,7 +30,7 @@ playerX_change = 0
 #Enemy
 EnemyImg = pygame.image.load('broken-heart.png')
 EnemyX = random.randint(0, 800)
-EnemyY = 50
+EnemyY = 50 #change to random, between 50 and 150
 EnemyX_change  = 0.3
 EnemyY_change = 40
 
@@ -64,10 +64,11 @@ while running: #anything you want to appear continuously must go inside this whi
         playerX = 0
     elif playerX >= 736: #subtract the size of sprite from the side (800 pixels)
         playerX = 736
+
     #checking enemy movement
     EnemyX += EnemyX_change
     if EnemyX <= 0:
-        EnemyX_changeX = 0.3
+        EnemyX_change = 0.3
         EnemyY += EnemyY_change
     elif EnemyX >= 736:
         EnemyX_change = -0.3
