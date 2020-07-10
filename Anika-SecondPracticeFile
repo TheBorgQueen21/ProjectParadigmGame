@@ -34,11 +34,24 @@ EnemyY = 50 #change to random, between 50 and 150
 EnemyX_change  = 0.3
 EnemyY_change = 40
 
+#Bullet
+bulletImg = pygame.image.load('up-arrow.png')
+bulletX = 0
+bulletY = 480 #change to random, between 50 and 150
+bulletX_change  = 0.3
+bulletY_change = 40
+bullet_state = "ready" #ready state means you can't see the bullet on the screen, fire means bullet is moving
+
 def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
 def Enemy(x, y):
     screen.blit(EnemyImg, (x, y))
+
+def fire_bullet(x, y):
+    global bullet_state
+    bullet_state = "fire"
+    screen.blit(bulletImg, (x + 16, y + 10)
 
 #Game Loop (allows user to exit)
 running = True
@@ -55,6 +68,8 @@ while running: #anything you want to appear continuously must go inside this whi
                 playerX_change = -0.3
             if event.key == pygame.K_RIGHT:
                 playerX_change = 0.3
+            if event.key == pygame.K_SPACE:
+                fire_bullet (playerX, bulletY)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 playerX_change = 0
@@ -73,6 +88,12 @@ while running: #anything you want to appear continuously must go inside this whi
     elif EnemyX >= 736:
         EnemyX_change = -0.3
         EnemyY += EnemyY_change
+
+    #bullet movement
+    if bullet_state is "fire":
+        fire_bullet (playerX, bulletY)
+        bulletY -= bulletY_change
+
 
     player(playerX, playerY) #must be after fill method bc it wont be overwritten by the background
     Enemy(EnemyX, EnemyY)
