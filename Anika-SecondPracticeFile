@@ -29,11 +29,18 @@ playerY = 480
 playerX_change = 0
 
 #Enemy
-EnemyImg = pygame.image.load('broken-heart.png')
-EnemyX = random.randint(0, 800)
-EnemyY = 50 #change to random, between 50 and 150
-EnemyX_change  = 0.3
-EnemyY_change = 40
+EnemyImg = []
+EnemyX = []
+EnemyY = []
+EnemyX_change  = []
+EnemyY_change = []
+num_of_enemies = 6
+
+for i in range (num_of_enemies):
+    EnemyImg.append(pygame.image.load('broken-heart.png'))
+    EnemyY.append(50) #change to random, between 50 and 150
+    EnemyX_change.append(0.3)
+    EnemyY_change.append(40)
 
 #Bullet
 bulletImg = pygame.image.load('up-arrow.png')
@@ -42,6 +49,9 @@ bulletY = 480 #change to random, between 50 and 150
 bulletX_change  = 0.3
 bulletY_change = 1
 bullet_state = "ready" #ready state means you can't see the bullet on the screen, fire means bullet is moving
+
+score = 0
+
 
 def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
@@ -53,6 +63,14 @@ def fire_bullet(x, y):
     global bullet_state
     bullet_state = "fire"
     screen.blit(bulletImg, (x + int(16), y + int(10)))
+
+def isCollision (EnemyX, EnemyY, bulletX, bulletY ):
+    distance = math.sqrt ((math.pow(EnemyX - bulletX,2)) + (math.pow(EnemyY - bulletY,2)))
+    if distance < 27:
+        return True
+    else:
+        return False
+
 
 #Game Loop (allows user to exit)
 running = True
@@ -84,13 +102,14 @@ while running: #anything you want to appear continuously must go inside this whi
         playerX = 736
 
     #checking enemy movement
-    EnemyX += EnemyX_change
-    if EnemyX <= 0:
-        EnemyX_change = 0.3
-        EnemyY += EnemyY_change
-    elif EnemyX >= 736:
-        EnemyX_change = -0.3
-        EnemyY += EnemyY_change
+    for i in range (num_of_enemies):
+        EnemyX[i] += EnemyX_change[i]
+        if EnemyX[i] <= 0:
+            EnemyX_change[i] = 0.3
+            EnemyY[i] += EnemyY_change[i]
+        elif EnemyX[i] >= 736:
+            EnemyX_change[i] = -0.3
+            EnemyY[i] += EnemyY_change[i]
 
     #bullet movement
     if bulletY <= 0:
@@ -101,6 +120,16 @@ while running: #anything you want to appear continuously must go inside this whi
     if bullet_state is "fire":
         fire_bullet (bulletX, bulletY)
         bulletY -= bulletY_change
+
+    #collision check
+    collision = isCollision (EnemyX, EnemyY, bulletX, bulletY)
+    if collision:
+        bulletY = 480
+        bullet_state = "ready"
+        score += 1
+        print (str(score))
+        EnemyX = random.randint(0, 735)
+        EnemyY = 50 #change to random, between 50 and 150
 
 
     player(playerX, playerY) #must be after fill method bc it wont be overwritten by the background
