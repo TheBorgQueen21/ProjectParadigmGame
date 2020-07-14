@@ -38,26 +38,36 @@ num_of_enemies = 6
 
 for i in range (num_of_enemies):
     EnemyImg.append(pygame.image.load('broken-heart.png'))
-    EnemyY.append(50) #change to random, between 50 and 150
-    EnemyX_change.append(0.3)
+    EnemyX.append(random.randint(50, 150))
+    EnemyY.append(random.randint(50, 150))
+    EnemyX_change.append(0.5)
     EnemyY_change.append(40)
 
 #Bullet
 bulletImg = pygame.image.load('up-arrow.png')
 bulletX = 0
 bulletY = 480 #change to random, between 50 and 150
-bulletX_change  = 0.3
+bulletX_change  = 1###
 bulletY_change = 1
 bullet_state = "ready" #ready state means you can't see the bullet on the screen, fire means bullet is moving
 
-score = 0
+#score
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+textX = 10
+textY = 10
+
+def show_score (x, y):
+    score = font.render("Score: " + str(score_value), True, (255, 255, 255))
+    screen.blit (score, (x, y))
 
 
 def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
-def Enemy(x, y):
-    screen.blit(EnemyImg, (x, y))
+def Enemy(x, y, i):
+    screen.blit(EnemyImg [i], (x, y))
 
 def fire_bullet(x, y):
     global bullet_state
@@ -84,9 +94,9 @@ while running: #anything you want to appear continuously must go inside this whi
         #if keystroke pressed, check if right or left
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.3
+                playerX_change = -0.5
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.3
+                playerX_change = 0.5
             if event.key == pygame.K_SPACE:
                 if bullet_state is "ready":
                     bulletX = playerX
@@ -105,11 +115,23 @@ while running: #anything you want to appear continuously must go inside this whi
     for i in range (num_of_enemies):
         EnemyX[i] += EnemyX_change[i]
         if EnemyX[i] <= 0:
-            EnemyX_change[i] = 0.3
+            EnemyX_change[i] = 0.5###
             EnemyY[i] += EnemyY_change[i]
         elif EnemyX[i] >= 736:
-            EnemyX_change[i] = -0.3
+            EnemyX_change[i] = -0.5###
             EnemyY[i] += EnemyY_change[i]
+
+        #collision
+        collision = isCollision (EnemyX[i], EnemyY[i], bulletX, bulletY)
+        if collision:
+            bulletY = 480
+            bullet_state = "ready"
+            score_value += 1
+            EnemyX[i] = random.randint(0, 735)
+            EnemyY[i] = 50 #change to random, between 50 and 150
+
+        Enemy(EnemyX[i], EnemyY[i], i)
+
 
     #bullet movement
     if bulletY <= 0:
@@ -121,17 +143,9 @@ while running: #anything you want to appear continuously must go inside this whi
         fire_bullet (bulletX, bulletY)
         bulletY -= bulletY_change
 
-    #collision check
-    collision = isCollision (EnemyX, EnemyY, bulletX, bulletY)
-    if collision:
-        bulletY = 480
-        bullet_state = "ready"
-        score += 1
-        print (str(score))
-        EnemyX = random.randint(0, 735)
-        EnemyY = 50 #change to random, between 50 and 150
 
 
     player(playerX, playerY) #must be after fill method bc it wont be overwritten by the background
-    Enemy(EnemyX, EnemyY)
+    show_score(textX, textY)
+
     pygame.display.update()
