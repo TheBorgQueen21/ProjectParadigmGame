@@ -2,8 +2,6 @@
 ### Date: July 7, 2020
 ### File: Second Mini Game (space invader)
 
-#Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-
 #initialize the pygame
 import pygame
 import random
@@ -81,6 +79,11 @@ def isCollision (EnemyX, EnemyY, bulletX, bulletY ):
     else:
         return False
 
+#Game Over text
+over_font = pygame.font.Font('freesansbold.ttf', 64)
+def game_over_text():
+    over_text = over_font.render("Game Over", True, (255, 255, 255))
+    screen.blit (over_text, (200, 250))
 
 #Game Loop (allows user to exit)
 running = True
@@ -113,12 +116,20 @@ while running: #anything you want to appear continuously must go inside this whi
 
     #checking enemy movement
     for i in range (num_of_enemies):
+
+        #Game over
+        if EnemyY[i] > 440:
+            for j in range(num_of_enemies):
+                EnemyY[j] = 2000
+            game_over_text()
+            break
+
         EnemyX[i] += EnemyX_change[i]
         if EnemyX[i] <= 0:
-            EnemyX_change[i] = 0.5###
+            EnemyX_change[i] = 0.5
             EnemyY[i] += EnemyY_change[i]
         elif EnemyX[i] >= 736:
-            EnemyX_change[i] = -0.5###
+            EnemyX_change[i] = -0.5
             EnemyY[i] += EnemyY_change[i]
 
         #collision
