@@ -2,7 +2,6 @@
 ### Date: July 6, 2020
 ### File Owner: Everyone
 
-
 import pygame
 pygame.init()
 
@@ -15,15 +14,62 @@ icon = pygame.image.load ('flower (1).png')
 pygame.display.set_icon(icon)
 
 # background
-background = pygame.image.load("Background_first_draft_finalsize.png").convert()
+screen_one_background = pygame.image.load("Background_first_draft_finalsize.png").convert()
 
+#Player Code
+playerImg = pygame.image.load('heart.png')
+playerX = 370
+playerY = 480
+playerX_change = 0
+playerY_change = 0
+def player(x, y):
+    screen.blit(playerImg, (x, y)) #draws the player on the screen
+
+#Screen 1-at home
+def screen_one ():
+    screen.blit(screen_one_background, (0, 0))
+    if playerX == 143.5 and playerY<=480 and playerY >=402.5:
+        print("good")
+    else:
+        print ("bad")
+
+#Game Loop
 running = True
 while running: #anything you want to appear continuously must go inside this while loop
-    #screen.blit(background, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    #Assigns KeyBoard to Game
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            playerX_change = -0.5
+        if event.key == pygame.K_RIGHT:
+            playerX_change = 0.5
+        if event.key == pygame.K_DOWN:
+            playerY_change = 0.5
+        if event.key == pygame.K_UP:
+            playerY_change = -0.5
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or  event.key == pygame.K_DOWN or event.key == pygame.K_UP:
+            playerX_change = 0
+            playerY_change = 0
+
+    #Keeps Player in Bounds
+    playerX += playerX_change
+    playerY += playerY_change
+    if playerX <= 143.5:
+        playerX = 143.5
+    elif playerX >= 630.5:#736
+        playerX = 630.5
+    if playerY <= 64:
+        playerY = 64
+    elif playerY >= 480:
+        playerY = 480
+
+    #background mage
     screen.fill((0, 0, 0))
-    #background image
-    screen.blit(background, (0, 0))
+    screen_one()
+
+    player(playerX, playerY)
     pygame.display.update()
