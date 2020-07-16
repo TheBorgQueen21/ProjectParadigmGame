@@ -29,9 +29,23 @@ def player(x, y):
 def screen_one ():
     screen.blit(screen_one_background, (0, 0))
     if playerX == 143.5 and playerY<=480 and playerY >=402.5:
-        print("good")
+        print("plant")
+    elif playerX==143.5 and playerY<=334 and playerY >=262.5:
+        print("phone")
+    elif playerX>=143.5 and playerX<=247 and playerY == 64:
+        print("painting")
+    elif playerX == 526 and playerY == 64: #fix this
+        print("piggybank")
+
+    elif playerX == 630.5 and playerY == 64:
+        print("dumbells")
+    elif playerX == 630.5 and playerY == 262.5: #fix this
+        print("diary")
+    elif playerY == 630.5 and playerX<=371 and playerX== 463.5:
+        print("bookshelf")
     else:
-        print ("bad")
+        print("nothing")
+
 
 #Game Loop
 running = True
@@ -66,6 +80,9 @@ while running: #anything you want to appear continuously must go inside this whi
         playerY = 64
     elif playerY >= 480:
         playerY = 480
+
+    print (playerX)
+    print (playerY)
 
     #background mage
     screen.fill((0, 0, 0))
