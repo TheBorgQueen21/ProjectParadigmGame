@@ -34,14 +34,13 @@ def screen_one ():
         print("phone")
     elif playerX>=143.5 and playerX<=247 and playerY == 64:
         print("painting")
-    elif playerX == 526 and playerY == 64: #fix this
+    elif playerY==64 and playerX>=494.5 and playerX<=562.5:
         print("piggybank")
-
-    elif playerX == 630.5 and playerY == 64:
+    elif playerX==143.5 and playerY<=334 and playerY >=262.5: #fix this
         print("dumbells")
-    elif playerX == 630.5 and playerY == 262.5: #fix this
+    elif playerX==630.5 and playerY>=225.5 and playerY <=291:
         print("diary")
-    elif playerY == 630.5 and playerX<=371 and playerX== 463.5:
+    elif playerY== 630.5 and playerX>=371 and playerX<= 463.5: #fix this
         print("bookshelf")
     else:
         print("nothing")
@@ -81,8 +80,6 @@ while running: #anything you want to appear continuously must go inside this whi
     elif playerY >= 480:
         playerY = 480
 
-    print (playerX)
-    print (playerY)
 
     #background mage
     screen.fill((0, 0, 0))
