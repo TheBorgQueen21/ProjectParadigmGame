@@ -25,6 +25,9 @@ playerY_change = 0
 def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
+#Screen One Item Counter
+sone_item_count = 0
+
 #Screen 1-at home
 def screen_one ():
     screen.blit(screen_one_background, (0, 0))
@@ -36,12 +39,14 @@ def screen_one ():
         print("painting")
     elif playerY==64 and playerX>=494.5 and playerX<=562.5:
         print("piggybank")
-    elif playerX==143.5 and playerY<=334 and playerY >=262.5: #fix this
+    elif playerX==630.5 and playerY ==64:
         print("dumbells")
     elif playerX==630.5 and playerY>=225.5 and playerY <=291:
         print("diary")
-    elif playerY== 630.5 and playerX>=371 and playerX<= 463.5: #fix this
+    elif playerX== 630.5 and playerY>=375.5 and playerY<= 480:
         print("bookshelf")
+    elif playerX >= 307 and playerX<=440 and playerY <= 186:
+        print("bed")
     else:
         print("nothing")
 
@@ -79,7 +84,8 @@ while running: #anything you want to appear continuously must go inside this whi
         playerY = 64
     elif playerY >= 480:
         playerY = 480
-
+    #print (playerX)
+    #print (playerY)
 
     #background mage
     screen.fill((0, 0, 0))
