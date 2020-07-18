@@ -7,7 +7,11 @@ pygame.init()
 
 #create the screen
 screen = pygame.display.set_mode((800, 600))
-#testing code here...
+#Colors
+black = (0, 0, 0)
+
+#font
+over_font = pygame.font.Font('freesansbold.ttf', 20)
 
 #Title and Icon
 pygame.display.set_caption("Project Paradigm")
@@ -27,27 +31,45 @@ def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
 #Screen One Item Counter
-sone_item_count = 0
+#sone_item_count = 0
+
+#Press space
+def spacepress (scripttext):
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_SPACE:
+            pygame.draw.rect(screen,black,(0, 350, 800, 600))
+            over_text = over_font.render(scripttext, True, (255, 255, 255))
+            screen.blit (over_text, (20, 400))
+
 
 #Screen 1-at home
 def screen_one ():
     screen.blit(screen_one_background, (0, 0))
+    sone_item_count = 0
     if playerX == 143.5 and playerY<=480 and playerY >=402.5:
         print("plant")
+        spacepress("plant_Trying out code")
     elif playerX==143.5 and playerY<=334 and playerY >=262.5:
         print("phone")
+        spacepress("phone_Trying out code")
     elif playerX>=143.5 and playerX<=247 and playerY == 64:
         print("painting")
+        spacepress("painting_Trying out code")
     elif playerY==64 and playerX>=494.5 and playerX<=562.5:
         print("piggybank")
+        sone_item_count += 1
+        spacepress("piggybank_Trying out code")
     elif playerX==630.5 and playerY ==64:
         print("dumbells")
+        spacepress("dumbbells_Trying out code")
     elif playerX==630.5 and playerY>=225.5 and playerY <=291:
         print("diary")
+        spacepress("diary_Trying out code")
     elif playerX== 630.5 and playerY>=375.5 and playerY<= 480:
         print("bookshelf")
-    elif playerX >= 307 and playerX<=440 and playerY <= 186:
-        print("bed")
+        spacepress("bookshelf_Trying out code")
+    #elif playerX >= 307 and playerX<=440 and playerY <= 186:
+        #print("bed")
     else:
         print("nothing")
 
