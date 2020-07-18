@@ -8,6 +8,9 @@ import random
 import math
 pygame.init ()
 
+#testing again different area
+
+
 #create the screen
 screen = pygame.display.set_mode((800, 600))
 
