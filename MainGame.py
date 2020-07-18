@@ -20,6 +20,7 @@ pygame.display.set_icon(icon)
 
 # background
 screen_one_background = pygame.image.load("Background_first_draft_finalsize.png").convert()
+screen_two_background = pygame.image.load("cave_background.png").convert()
 
 #Player Code
 playerImg = pygame.image.load('heart.png')
@@ -34,44 +35,57 @@ def player(x, y):
 #sone_item_count = 0
 
 #Press space
-def spacepress (scripttext):
+def spacepress (scripttext, secondtext):
+    #global sone_item_count
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_SPACE:
             pygame.draw.rect(screen,black,(0, 350, 800, 600))
-            over_text = over_font.render(scripttext, True, (255, 255, 255))
-            screen.blit (over_text, (20, 400))
+            first_text = over_font.render(scripttext, True, (255, 255, 255))
+            second_text= over_font.render(secondtext, True, (255, 255, 255))
+            screen.blit (first_text, (20, 400))
+            screen.blit (second_text, (20, 450))
+            #sone_item_count += 1
 
 
 #Screen 1-at home
 def screen_one ():
     screen.blit(screen_one_background, (0, 0))
-    sone_item_count = 0
+    screentwo = False
     if playerX == 143.5 and playerY<=480 and playerY >=402.5:
         print("plant")
-        spacepress("plant_Trying out code")
+        spacepress("plant_Trying out code", "")
     elif playerX==143.5 and playerY<=334 and playerY >=262.5:
         print("phone")
-        spacepress("phone_Trying out code")
+        spacepress("phone_Trying out code" , "")
     elif playerX>=143.5 and playerX<=247 and playerY == 64:
         print("painting")
-        spacepress("painting_Trying out code")
+        spacepress("This is a painting that came with this house.", "There is something behind it. (press e to take out painting)")
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_e:
+                screentwo = True
     elif playerY==64 and playerX>=494.5 and playerX<=562.5:
         print("piggybank")
-        sone_item_count += 1
-        spacepress("piggybank_Trying out code")
+        spacepress("piggybank_Trying out code", "")
     elif playerX==630.5 and playerY ==64:
         print("dumbells")
-        spacepress("dumbbells_Trying out code")
+        spacepress("dumbbells_Trying out code", "")
     elif playerX==630.5 and playerY>=225.5 and playerY <=291:
         print("diary")
-        spacepress("diary_Trying out code")
+        spacepress("diary_Trying out code", "")
     elif playerX== 630.5 and playerY>=375.5 and playerY<= 480:
         print("bookshelf")
-        spacepress("bookshelf_Trying out code")
+        spacepress("bookshelf_Trying out code", "")
     #elif playerX >= 307 and playerX<=440 and playerY <= 186:
         #print("bed")
     else:
         print("nothing")
+    if screentwo == True:
+        screen_two()
+
+def screen_two ():
+    playerX = 75
+    playerY = 300
+    screen.blit(screen_two_background, (0, 0)) #figrue out how to change the backgrounds
 
 
 #Game Loop
