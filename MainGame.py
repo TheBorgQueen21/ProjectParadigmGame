@@ -32,7 +32,7 @@ def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
 #Screen One Item Counter
-#sone_item_count = 0
+x = 0
 
 #Press space
 def spacepress (scripttext, secondtext):
@@ -48,7 +48,7 @@ def spacepress (scripttext, secondtext):
 
 
 #Screen 1-at home
-def screen_one ():
+def screen_one (x):
     screen.blit(screen_one_background, (0, 0))
     screentwo = False
     if playerX == 143.5 and playerY<=480 and playerY >=402.5:
@@ -62,7 +62,7 @@ def screen_one ():
         spacepress("This is a painting that came with this house.", "There is something behind it. (press e to take out painting)")
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_e:
-                screentwo = True
+                x+=1
     elif playerY==64 and playerX>=494.5 and playerX<=562.5:
         print("piggybank")
         spacepress("piggybank_Trying out code", "")
@@ -79,7 +79,7 @@ def screen_one ():
         #print("bed")
     else:
         print("nothing")
-    if screentwo == True:
+    if x >= 1:
         screen_two()
 
 def screen_two ():
@@ -126,7 +126,6 @@ while running: #anything you want to appear continuously must go inside this whi
 
     #background mage
     screen.fill((0, 0, 0))
-    screen_one()
-
+    screen_one(x)
     player(playerX, playerY)
     pygame.display.update()
