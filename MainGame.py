@@ -21,6 +21,7 @@ pygame.display.set_icon(icon)
 # background
 screen_one_background = pygame.image.load("Background_first_draft_finalsize.png").convert()
 screen_two_background = pygame.image.load("cave_background.png").convert()
+screen_three_background = pygame.image.load("Yellow_Background.png").convert()
 
 #Player Code
 playerImg = pygame.image.load('heart.png')
@@ -32,7 +33,7 @@ def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
 #Screen One Item Counter
-x = 0
+
 
 #Press space
 def spacepress (scripttext, secondtext):
@@ -47,8 +48,17 @@ def spacepress (scripttext, secondtext):
             #sone_item_count += 1
 
 
+def screen_two ():
+    playerX = 75
+    playerY = 300
+    screen.blit(screen_two_background, (0, 0)) #figrue out how to change the backgrounds
+def screen_three ():
+    playerX = 75
+    playerY = 300
+    screen.blit(screen_three_background, (0, 0)) #figrue out how to change the backgrounds
+
 #Screen 1-at home
-def screen_one (x):
+def screen_one ():
     screen.blit(screen_one_background, (0, 0))
     screentwo = False
     if playerX == 143.5 and playerY<=480 and playerY >=402.5:
@@ -62,7 +72,7 @@ def screen_one (x):
         spacepress("This is a painting that came with this house.", "There is something behind it. (press e to take out painting)")
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_e:
-                x+=1
+
     elif playerY==64 and playerX>=494.5 and playerX<=562.5:
         print("piggybank")
         spacepress("piggybank_Trying out code", "")
@@ -79,13 +89,6 @@ def screen_one (x):
         #print("bed")
     else:
         print("nothing")
-    if x >= 1:
-        screen_two()
-
-def screen_two ():
-    playerX = 75
-    playerY = 300
-    screen.blit(screen_two_background, (0, 0)) #figrue out how to change the backgrounds
 
 
 #Game Loop
@@ -126,6 +129,6 @@ while running: #anything you want to appear continuously must go inside this whi
 
     #background mage
     screen.fill((0, 0, 0))
-    screen_one(x)
+    screen_one()
     player(playerX, playerY)
     pygame.display.update()
