@@ -296,3 +296,38 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#Trying out Classes for Different Rooms
+"""class Room(object):
+    Base class for all rooms.
+
+    # Each room has a list of walls, and of enemy sprites.
+    background_list = []
+    sprite_list = None
+
+    def __init__(self):
+        Constructor, create our lists.
+        self.background_list = pygame.sprite.Group()
+        self.sprite_list = pygame.sprite.Group()
+
+class Room1(Room):
+    This creates all the walls in room 1
+    def __init__(self):
+        super().__init__()
+        # Make the walls. (x_pos, y_pos, width, height)
+
+        # This is a list of walls. Each is in the form [x, y, width, height]
+        sprites = [[playerX == 143.5, playerY<=480, playerY >=402.5], #playerX == 143.5 and playerY<=480 and playerY >=402.5
+                 [playerX==143.5, playerY<=334, playerY >=262.5], #playerX==143.5 and playerY<=334 and playerY >=262.5
+                 [playerX>=143.5, playerX<=247, playerY == 64], #playerX>=143.5 and playerX<=247 and playerY == 64
+                 [playerY==64, playerX>=494.5, playerX<=562.5], #playerY==64 and playerX>=494.5 and playerX<=562.5
+                 [playerX==630.5, playerY>=225.5, playerY <=291], #playerX==630.5 and playerY>=225.5 and playerY <=291
+                 [playerX== 630.5, playerY>=375.5, playerY<= 480], #playerX== 630.5 and playerY>=375.5 and playerY<= 480
+                ]
+        background.append(screen_one_background)
+
+class Room2(Room):
+    This creates all the walls in room 1
+    def __init__(self):
+        super().__init__()"""
+        # Make the walls. (x_pos, y_pos, width, height)
