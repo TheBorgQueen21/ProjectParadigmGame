@@ -34,7 +34,7 @@ playerY_change = 0
 def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
-
+### continue converting from here ###
 
 #Press space
 def spacepress (scripttext, secondtext):
@@ -90,7 +90,6 @@ def screen_one ():
         #print("bed")
     else:
         print("nothing")
-
 
 #Game Loop
 running = True
