@@ -10,6 +10,11 @@ RED = (255, 0, 0)
 SCREEN_WIDTH = 700
 SCREEN_HEIGHT = 500
 
+over_font = pygame.font.Font('freesansbold.ttf', 20)
+screen_one_background = pygame.image.load("Background_first_draft_finalsize.png").convert()
+screen_two_background = pygame.image.load("cave_background.png").convert()
+screen_three_background = pygame.image.load("Yellow_Background.png").convert()
+
 # --- Classes ---
 
 
@@ -51,6 +56,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         """ Update the player location. """
         screen.blit(playerImg, (x, y)) #draws the player on the screen"""
+        player(playerX, playerY)
 
 
 class Game(object):
@@ -170,6 +176,24 @@ def main():
 
         # Pause for the next frame
         clock.tick(60)
+        
+        #Player Movement
+        if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            playerX_change = -0.5
+        if event.key == pygame.K_RIGHT:
+            playerX_change = 0.5
+        if event.key == pygame.K_DOWN:
+            playerY_change = 0.5
+        if event.key == pygame.K_UP:
+            playerY_change = -0.5
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or  event.key == pygame.K_DOWN or event.key == pygame.K_UP:
+                playerX_change = 0
+                playerY_change = 0
+        playerX += playerX_change
+        playerY += playerY_change
+
 
     # Close window and exit
     pygame.quit()
