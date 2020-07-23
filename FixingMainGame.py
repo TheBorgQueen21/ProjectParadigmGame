@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
         """ Update the player location. """
         screen.blit(playerImg, (x, y)) #draws the player on the screen"""
 
-###continue from here converting###
+
 class Game(object):
     """ This class represents an instance of the game. If we need to
         reset the game we'd just need to create a new instance of this
@@ -66,18 +66,8 @@ class Game(object):
         self.game_over = False
 
         # Create sprite lists
-        self.block_list = pygame.sprite.Group()
-        self.all_sprites_list = pygame.sprite.Group()
-
-        # Create the block sprites
-        for i in range(50):
-            block = Block()
-
-            block.rect.x = random.randrange(SCREEN_WIDTH)
-            block.rect.y = random.randrange(-300, SCREEN_HEIGHT)
-
-            self.block_list.add(block)
-            self.all_sprites_list.add(block)
+        self.objects_list = pygame.sprite.Group()
+        self.all_object_list = pygame.sprite.Group()
 
         # Create the player
         self.player = Player()
@@ -103,26 +93,36 @@ class Game(object):
         """
         if not self.game_over:
             # Move all the sprites
-            self.all_sprites_list.update()
+            self.objects_list.update()
 
             # See if the player block has collided with anything.
-            blocks_hit_list = pygame.sprite.spritecollide(self.player, self.block_list, True)
+            object_hit_list = pygame.sprite.spritecollide(self.player, self.objects_list, True)
 
             # Check the list of collisions.
             for block in blocks_hit_list:
-                self.score += 1
-                print(self.score)
+                self.numberhit += 1
+                if self.numberhit == 6:
+                print("try calling new scene?")
                 # You can do something with "block" here.
 
-            if len(self.block_list) == 0:
-                self.game_over = True
+            #if len(self.block_list) == 0: #change to somehow making game over?
+                #self.game_over = True
+                
+    def spacepress (scripttext, secondtext):
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_SPACE:
+                pygame.draw.rect(screen,black,(0, 350, 800, 600))
+                first_text = over_font.render(scripttext, True, (255, 255, 255))
+                second_text= over_font.render(secondtext, True, (255, 255, 255))
+                screen.blit (first_text, (20, 400))
+                screen.blit (second_text, (20, 450))
 
     def display_frame(self, screen):
         """ Display everything to the screen for the game. """
-        screen.fill(WHITE)
+        screen.fill(BLACK)
 
         if self.game_over:
-            # font = pygame.font.Font("Serif", 25)
+            font = pygame.font.Font("Serif", 25)
             font = pygame.font.SysFont("serif", 25)
             text = font.render("Game Over, click to restart", True, BLACK)
             center_x = (SCREEN_WIDTH // 2) - (text.get_width() // 2)
