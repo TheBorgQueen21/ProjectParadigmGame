@@ -34,7 +34,7 @@ playerY_change = 0
 def player(x, y):
     screen.blit(playerImg, (x, y)) #draws the player on the screen
 
-### continue converting from here ###
+
 
 #Press space
 def spacepress (scripttext, secondtext):
@@ -60,6 +60,7 @@ def screen_three ():
     screen.blit(screen_three_background, (0, 0)) #figrue out how to change the backgrounds
 
 #Screen 1-at home
+### add scrreen one
 def screen_one ():
     screen.blit(screen_one_background, (0, 0))
 
@@ -150,7 +151,7 @@ while running: #anything you want to appear continuously must go inside this whi
             playerY = 480
         print ("not scene 1")"""
 
-
+#add this to keep players in bound?
     if playerX <= 143.5:
         playerX = 143.5
     elif playerX >= 630.5:#736
