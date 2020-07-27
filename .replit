@@ -1,0 +1,2 @@
+language = "pygame"
+run = "run = \"<run command here>\" language = \"echo hello world"
