@@ -20,3 +20,5 @@ This is when you want to create a copy of the file.
 To save your changes, click Commit Changes.
 
 ***Commit means to create a change to the code***
+
+[![Run on Repl.it](https://repl.it/badge/github/TheBorgQueen21/ProjectParadigmGame)](https://repl.it/github/TheBorgQueen21/ProjectParadigmGame)
