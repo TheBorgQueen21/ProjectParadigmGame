@@ -86,6 +86,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.rect.top = block.rect.bottom
  #####***JULY 24: I need to fix the walls and where they are placed. I already: Converted the code above, added all the rooms (the rooms don't have correct walls yet)***#####
+ #####***JULY 27: I need to fix the walls' placement. I already: Fixed the order of the room ****######
  
 class Room(object):
     """ Base class for all rooms. """
@@ -102,7 +103,7 @@ class Room(object):
         self.chara_sprites = pygame.sprite.Group()
  
  
-class Room_Bedrom (Room):
+class Room_Bedroom (Room):
     """This creates all the walls in room 1"""
     def __init__(self):
         super().__init__()
@@ -298,14 +299,36 @@ def main():
  
     rooms = []
  
-    room = Room1()
+    room = Room_Bedroom()
     rooms.append(room)
  
-    room = Room2()
+    room = Room_Cave1()
     rooms.append(room)
  
-    room = Room3()
+    room = Room_Cave2()
     rooms.append(room)
+ 
+    room = Room_Cave3()
+    rooms.append(room)
+   
+    room = Room_WorldOne()
+    rooms.append(room)
+    
+    room = Room_WorldTwo()
+    rooms.append(room)
+    
+    room = Room_WorldThree()
+    rooms.append(room)
+    
+    room = Room_WorldFour()
+    rooms.append(room)
+    
+    room = Room_WorldFive()
+    rooms.append(room)
+        
+    room = Room_WorldSix()
+    rooms.append(room)   
+ 
  
     current_room_no = 0
     current_room = rooms[current_room_no]
@@ -347,32 +370,98 @@ def main():
         player.move(current_room.wall_list)
  
         if player.rect.x < -15:
-            if current_room_no == 0:
-                current_room_no = 2
+            if current_room_no == 1:
+                current_room_no = 5
                 current_room = rooms[current_room_no]
                 player.rect.x = 790
             elif current_room_no == 2:
-                current_room_no = 1
+                current_room_no = 7
                 current_room = rooms[current_room_no]
                 player.rect.x = 790
+            elif current_room_no == 3:
+                current_room_no = 9
+                current_room = rooms[current_room_no]
+                player.rect.x = 790             
+            elif current_room_no == 4:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.x = 790              
+             elif current_room_no == 3:
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.x = 790  
+            elif current_room_no == 5:
+                current_room_no = 3
+                current_room = rooms[current_room_no]
+                player.rect.x = 790                  
             else:
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.x = 790
  
         if player.rect.x > 801:
-            if current_room_no == 0:
-                current_room_no = 1
+             if current_room_no == 1:
+                current_room_no = 4
                 current_room = rooms[current_room_no]
-                player.rect.x = 0
-            elif current_room_no == 1:
+                player.rect.x = 790
+            elif current_room_no == 2:
+                current_room_no = 6
+                current_room = rooms[current_room_no]
+                player.rect.x = 790
+            elif current_room_no == 3:
+                current_room_no = 8
+                current_room = rooms[current_room_no]
+                player.rect.x = 790             
+            elif current_room_no == 9:
+                current_room_no = 3
+                current_room = rooms[current_room_no]
+                player.rect.x = 790              
+             elif current_room_no == 7:
                 current_room_no = 2
                 current_room = rooms[current_room_no]
-                player.rect.x = 0
+                player.rect.x = 790  
+            elif current_room_no == 5:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.x = 790                  
             else:
                 current_room_no = 0
                 current_room = rooms[current_room_no]
-                player.rect.x = 0
+                player.rect.x = 790
+                
+                
+        if player.rect.y < -15:
+            if current_room_no == 0:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.x = 200
+            elif current_room_no == 1:
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.x = 200
+            elif current_room_no == 2:
+                current_room_no = 3
+                current_room = rooms[current_room_no]
+                player.rect.x = 200
+            else:
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.x = 790
+        if player.rect.y > 601:
+            if current_room_no == 0
+                player.rect.x = 200
+            elif current_room_no == 2:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.x = 200
+            elif current_room_no == 3:
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.x = 200
+             else:
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.x = 790
  
         # --- Drawing ---
         screen.fill(BLACK)
