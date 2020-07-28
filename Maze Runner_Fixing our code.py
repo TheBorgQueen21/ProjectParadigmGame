@@ -85,8 +85,10 @@ class Player(pygame.sprite.Sprite):
                 self.rect.bottom = block.rect.top
             else:
                 self.rect.top = block.rect.bottom
+        
  #####***JULY 24: I need to fix the walls and where they are placed. I already: Converted the code above, added all the rooms (the rooms don't have correct walls yet)***#####
- #####***JULY 27: I need to fix the walls' placement. I already: Fixed the order of the room ****######
+ #####***JULY 27: I need to fix the walls' placement. I already: Fixed the order of the rooms ****######
+ #####***JULY 28: I need to add the text for the objects and find a place to test the code. I already: Fixed all the walls in the rooms. *****#####
  
 class Room(object):
     """ Base class for all rooms. """
@@ -103,20 +105,20 @@ class Room(object):
         self.chara_sprites = pygame.sprite.Group()
  
  
-class Room_Bedroom (Room):
+class Room_Bedroom (Room): #finished walls
     """This creates all the walls in room 1"""
     def __init__(self):
         super().__init__()
         # Make the walls. (x_pos, y_pos, width, height)
  
         # This is a list of walls. Each is in the form [x, y, width, height]
-        walls = [[0, 0, 20, 250, WHITE],
-                 [0, 350, 20, 250, WHITE],
-                 [780, 0, 20, 250, WHITE],
-                 [780, 350, 20, 250, WHITE],
-                 [20, 0, 760, 20, WHITE],
-                 [20, 580, 760, 20, WHITE],
+        walls = [[0, 0, 20, 600, RED], #left side closed
+                 [780, 0, 20, 600, RED], #right side closed
+                 [20, 0, 350, 20, RED], #top open left
+                 [20, 0, 420, 20, RED], #top open right
+                 [20, 580, 760, 20, RED], #bottom closed
                 ]
+ 
  
         # Loop through the list. Create the wall, add it to the list
         for item in walls:
@@ -124,17 +126,19 @@ class Room_Bedroom (Room):
             self.wall_list.add(wall)
  
  
-class Room_Cave1(Room):
+class Room_Cave1(Room): #walls done
     """This creates all the walls in room 2"""
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, RED],
-                 [0, 350, 20, 250, RED],
-                 [780, 0, 20, 250, RED],
-                 [780, 350, 20, 250, RED],
-                 [20, 0, 760, 20, RED],
-                 [20, 580, 760, 20, RED],
+        walls = [[0, 0, 20, 250, RED], #left open top
+                 [0, 350, 20, 250, RED], #left open bottom
+                 [780, 0, 20, 250, RED], #right open top
+                 [780, 350, 20, 250, RED], #right open bottom
+                 [20, 0, 350, 20, RED], #top open left
+                 [20, 0, 420, 20, RED], #top open right
+                 [20, 580, 350, 20, RED], #bottom open right
+                 [20, 580, 420, 20, RED], #bottom open right
                 ]
  
         for item in walls:
@@ -142,34 +146,35 @@ class Room_Cave1(Room):
             self.wall_list.add(wall)
  
  
-class Room_Cave2 (Room):
+class Room_Cave2 (Room): #walls done
     """This creates all the walls in room 3"""
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        walls = [[0, 0, 20, 250, RED], #left open top
+                 [0, 350, 20, 250, RED], #left open bottom
+                 [780, 0, 20, 250, RED], #right open top
+                 [780, 350, 20, 250, RED], #right open bottom
+                 [20, 0, 350, 20, RED], #top open left
+                 [20, 0, 420, 20, RED], #top open right
+                 [20, 580, 350, 20, RED], #bottom open right
+                 [20, 580, 420, 20, RED], #bottom open right
                 ]
- 
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
            
-class Room_Cave3 (Room):
+class Room_Cave3 (Room): #finsihed these walls
     """This creates all the walls in room 3"""
     def __init__(self):
-        super().__init__()
- 
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        super().__init__()    
+        walls = [[0, 0, 20, 250, WHITE],
+                 [0, 350, 20, 250, WHITE],
+                 [780, 0, 20, 250, WHITE],
+                 [780, 350, 20, 250, WHITE],
+                 [20, 0, 760, 20, WHITE],
+                 [20, 580, 350, 20, RED], #bottom open right
+                 [20, 580, 420, 20, RED], #bottom open right
                 ]
  
         for item in walls:
@@ -183,11 +188,11 @@ class Room_WorldOne (Room):
  
         walls = [[0, 0, 20, 250, PURPLE],
                  [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
+                 [780, 0, 20, 600, PURPLE],
                  [20, 0, 760, 20, PURPLE],
                  [20, 580, 760, 20, PURPLE]
                 ]
+ 
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -198,8 +203,7 @@ class Room_WorldTwo (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
+        walls = [[0, 0, 20, 600, PURPLE], #left closed
                  [780, 0, 20, 250, PURPLE],
                  [780, 350, 20, 250, PURPLE],
                  [20, 0, 760, 20, PURPLE],
@@ -217,12 +221,12 @@ class Room_WorldThree (Room):
  
         walls = [[0, 0, 20, 250, PURPLE],
                  [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
+                 [780, 0, 20, 600, PURPLE],
                  [20, 0, 760, 20, PURPLE],
                  [20, 580, 760, 20, PURPLE]
                 ]
  
+  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
@@ -232,8 +236,7 @@ class Room_WorldFour (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
+        walls = [[0, 0, 20, 600, PURPLE], #left closed
                  [780, 0, 20, 250, PURPLE],
                  [780, 350, 20, 250, PURPLE],
                  [20, 0, 760, 20, PURPLE],
@@ -252,11 +255,11 @@ class Room_WorldFive (Room):
  
         walls = [[0, 0, 20, 250, PURPLE],
                  [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
+                 [780, 0, 20, 600, PURPLE],
                  [20, 0, 760, 20, PURPLE],
                  [20, 580, 760, 20, PURPLE]
                 ]
+ 
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -267,8 +270,7 @@ class Room_WorldFive (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
+        walls = [[0, 0, 20, 600, PURPLE], #left closed
                  [780, 0, 20, 250, PURPLE],
                  [780, 350, 20, 250, PURPLE],
                  [20, 0, 760, 20, PURPLE],
