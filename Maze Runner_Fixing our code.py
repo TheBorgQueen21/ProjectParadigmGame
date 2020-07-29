@@ -6,6 +6,11 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 PURPLE = (255, 0, 255)
+PINK = (255, 51, 153)
+YELLOW = (255, 255, 51)
+NAVY = (0, 0, 204)
+ORANGE = (255, 128, 0)
+LIGHTPURPLE = (229, 204, 225)
  
  
 class Wall(pygame.sprite.Sprite):
@@ -43,8 +48,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
  
         # Set height, width
-        self.image = pygame.image.load('heart.png') ##pygame.Surface([15, 15])
-        ##self.image.fill(WHITE)
+        self.image = pygame.Surface([15, 15])##pygame.image.load('heart.png') 
+        self.image.fill(WHITE)
  
         # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
@@ -112,11 +117,11 @@ class Room_Bedroom (Room): #finished walls
         # Make the walls. (x_pos, y_pos, width, height)
  
         # This is a list of walls. Each is in the form [x, y, width, height]
-        walls = [[0, 0, 20, 600, RED], #left side closed
-                 [780, 0, 20, 600, RED], #right side closed
-                 [20, 0, 350, 20, RED], #top open left
-                 [20, 0, 420, 20, RED], #top open right
-                 [20, 580, 760, 20, RED], #bottom closed
+        walls = [[0, 0, 20, 600, PINK], #left side closed
+                 [780, 0, 20, 600, PINK], #right side closed
+                 [20, 0, 350, 20, PINK], #top open left
+                 [20, 0, 420, 20, PINK], #top open right
+                 [20, 580, 760, 20, PINK], #bottom closed
                 ]
  
  
@@ -151,14 +156,14 @@ class Room_Cave2 (Room): #walls done
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, RED], #left open top
-                 [0, 350, 20, 250, RED], #left open bottom
-                 [780, 0, 20, 250, RED], #right open top
-                 [780, 350, 20, 250, RED], #right open bottom
-                 [20, 0, 350, 20, RED], #top open left
-                 [20, 0, 420, 20, RED], #top open right
-                 [20, 580, 350, 20, RED], #bottom open right
-                 [20, 580, 420, 20, RED], #bottom open right
+        walls = [[0, 0, 20, 250, WHITE], #left open top
+                 [0, 350, 20, 250, WHITE], #left open bottom
+                 [780, 0, 20, 250, WHITE], #right open top
+                 [780, 350, 20, 250, WHITE], #right open bottom
+                 [20, 0, 350, 20, WHITE], #top open left
+                 [20, 0, 420, 20, WHITE], #top open right
+                 [20, 580, 350, 20, WHITE], #bottom open right
+                 [20, 580, 420, 20, WHITE], #bottom open right
                 ]
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -168,13 +173,13 @@ class Room_Cave3 (Room): #finsihed these walls
     """This creates all the walls in room 3"""
     def __init__(self):
         super().__init__()    
-        walls = [[0, 0, 20, 250, WHITE],
-                 [0, 350, 20, 250, WHITE],
-                 [780, 0, 20, 250, WHITE],
-                 [780, 350, 20, 250, WHITE],
-                 [20, 0, 760, 20, WHITE],
-                 [20, 580, 350, 20, RED], #bottom open right
-                 [20, 580, 420, 20, RED], #bottom open right
+        walls = [[0, 0, 20, 250, BLUE],
+                 [0, 350, 20, 250, BLUE],
+                 [780, 0, 20, 250, BLUE],
+                 [780, 350, 20, 250, BLUE],
+                 [20, 0, 760, 20, BLUE],
+                 [20, 580, 350, 20, BLUE], #bottom open right
+                 [20, 580, 420, 20, BLUE], #bottom open right
                 ]
  
         for item in walls:
@@ -203,11 +208,11 @@ class Room_WorldTwo (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 600, PURPLE], #left closed
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        walls = [[0, 0, 20, 600, GREEN], #left closed
+                 [780, 0, 20, 250, GREEN],
+                 [780, 350, 20, 250, GREEN],
+                 [20, 0, 760, 20, GREEN],
+                 [20, 580, 760, 20, GREEN]
                 ]
  
         for item in walls:
@@ -219,11 +224,11 @@ class Room_WorldThree (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 600, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        walls = [[0, 0, 20, 250, LIGHTPURPLE],
+                 [0, 350, 20, 250, LIGHTPURPLE],
+                 [780, 0, 20, 600, LIGHTPURPLE],
+                 [20, 0, 760, 20, LIGHTPURPLE],
+                 [20, 580, 760, 20, LIGHTPURPLE]
                 ]
  
   
@@ -236,11 +241,11 @@ class Room_WorldFour (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 600, PURPLE], #left closed
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        walls = [[0, 0, 20, 600, YELLOW], #left closed
+                 [780, 0, 20, 250, YELLOW],
+                 [780, 350, 20, 250, YELLOW],
+                 [20, 0, 760, 20, YELLOW],
+                 [20, 580, 760, 20, YELLOW]
                 ]
  
         for item in walls:
@@ -253,11 +258,11 @@ class Room_WorldFive (Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 600, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        walls = [[0, 0, 20, 250, NAVY],
+                 [0, 350, 20, 250, NAVY],
+                 [780, 0, 20, 600, NAVY],
+                 [20, 0, 760, 20, NAVY],
+                 [20, 580, 760, 20, NAVY]
                 ]
  
  
@@ -265,21 +270,21 @@ class Room_WorldFive (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
  
- class Room_WorldSix (Room):
-    """This creates all the walls in room 3"""
-    def __init__(self):
-        super().__init__()
+class Room_WorldSix (Room):
+  """This creates all the walls in room 3"""
+  def __init__(self):
+    super().__init__()
  
-        walls = [[0, 0, 20, 600, PURPLE], #left closed
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
-                ]
+    walls = [[0, 0, 20, 600, ORANGE], #left closed
+            [780, 0, 20, 250, ORANGE],
+            [780, 350, 20, 250, ORANGE],
+            [20, 0, 760, 20, ORANGE],
+            [20, 580, 760, 20, ORANGE]
+            ]
  
-        for item in walls:
-            wall = Wall(item[0], item[1], item[2], item[3], item[4])
-            self.wall_list.add(wall)
+    for item in walls:
+      wall = Wall(item[0], item[1], item[2], item[3], item[4])
+      self.wall_list.add(wall)
  
  
 def main():
@@ -388,7 +393,7 @@ def main():
                 current_room_no = 1
                 current_room = rooms[current_room_no]
                 player.rect.x = 790              
-             elif current_room_no == 3:
+            elif current_room_no == 3:
                 current_room_no = 2
                 current_room = rooms[current_room_no]
                 player.rect.x = 790  
@@ -402,10 +407,10 @@ def main():
                 player.rect.x = 790
  
         if player.rect.x > 801:
-             if current_room_no == 1:
-                current_room_no = 4
-                current_room = rooms[current_room_no]
-                player.rect.x = 790
+            if current_room_no == 1:
+              current_room_no = 4
+              current_room = rooms[current_room_no]
+              player.rect.x = 790
             elif current_room_no == 2:
                 current_room_no = 6
                 current_room = rooms[current_room_no]
@@ -418,7 +423,7 @@ def main():
                 current_room_no = 3
                 current_room = rooms[current_room_no]
                 player.rect.x = 790              
-             elif current_room_no == 7:
+            elif current_room_no == 7:
                 current_room_no = 2
                 current_room = rooms[current_room_no]
                 player.rect.x = 790  
@@ -437,7 +442,7 @@ def main():
                 current_room_no = 1
                 current_room = rooms[current_room_no]
                 player.rect.x = 200
-            elif current_room_no == 1:
+            """elif current_room_no == 1: ##Something wrong here
                 current_room_no = 2
                 current_room = rooms[current_room_no]
                 player.rect.x = 200
@@ -448,9 +453,9 @@ def main():
             else:
                 current_room_no = 0
                 current_room = rooms[current_room_no]
-                player.rect.x = 790
+                player.rect.x = 790"""
         if player.rect.y > 601:
-            if current_room_no == 0
+            if current_room_no == 0:
                 player.rect.x = 200
             elif current_room_no == 2:
                 current_room_no = 1
@@ -460,16 +465,17 @@ def main():
                 current_room_no = 2
                 current_room = rooms[current_room_no]
                 player.rect.x = 200
-             else:
+            else:
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.x = 790
  
         # --- Drawing ---
         screen.fill(BLACK)
- 
-        movingsprites.draw(screen)
+        
         current_room.wall_list.draw(screen)
+        movingsprites.draw(screen)
+        
  
         pygame.display.flip()
  
