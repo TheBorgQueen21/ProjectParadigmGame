@@ -11,9 +11,44 @@ YELLOW = (255, 255, 51)
 NAVY = (0, 0, 204)
 ORANGE = (255, 128, 0)
 LIGHTPURPLE = (229, 204, 225)
+LIGHTPINK = (255, 204, 255)
+LIGHTBLUE = (204, 255, 255)
+
+####TRYING THIS OUT
+def spacepress (scripttext, secondtext):
+    #global sone_item_count
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_SPACE:
+            pygame.draw.rect(screen, BLACK,(0, 350, 800, 600))
+            first_text = over_font.render(scripttext, True, (255, 255, 255))
+            second_text= over_font.render(secondtext, True, (255, 255, 255))
+            screen.blit (first_text, (20, 400))
+            screen.blit (second_text, (20, 450))
+
+
  
  
 class Wall(pygame.sprite.Sprite):
+    """This class represents the bar at the bottom that the player controls """
+ 
+    def __init__(self, x, y, width, height, color):
+        """ Constructor function """
+ 
+        # Call the parent's constructor
+        super().__init__()
+ 
+        # Make a BLUE wall, of the size specified in the parameters
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+ 
+        # Make our top-left corner the passed-in location.
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+        
+        
+###TESTING THIS OUT
+class Object(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
  
     def __init__(self, x, y, width, height, color):
@@ -61,7 +96,7 @@ class Player(pygame.sprite.Sprite):
         self.change_x += x
         self.change_y += y
  
-    def move(self, walls):
+    def move(self, walls, objects): ###added objects here
         """ Find a new position for the player """
  
         # Move left/right
@@ -90,11 +125,35 @@ class Player(pygame.sprite.Sprite):
                 self.rect.bottom = block.rect.top
             else:
                 self.rect.top = block.rect.bottom
+                
+        ###TESTING THIS CODE OUT
+        # Did this update cause us to hit a wall?
+        block_hit_list = pygame.sprite.spritecollide(self, objects, False)
+        for block in block_hit_list:
+            # If we are moving right, set our right side to the left side of
+            # the item we hit
+            if self.change_x > 0:
+                self.rect.right = block.rect.left
+            else:
+                # Otherwise if we are moving left, do the opposite.
+                self.rect.left = block.rect.right
+ 
+        # Check and see if we hit anything
+        block_hit_list = pygame.sprite.spritecollide(self, objects, False)
+        for block in block_hit_list:
+ 
+            # Reset our position based on the top/bottom of the object.
+            if self.change_y > 0:
+                self.rect.bottom = block.rect.top
+            else:
+                self.rect.top = block.rect.bottom
         
  #####***JULY 24: I need to fix the walls and where they are placed. I already: Converted the code above, added all the rooms (the rooms don't have correct walls yet)***#####
  #####***JULY 27: I need to fix the walls' placement. I already: Fixed the order of the rooms ****######
  #####***JULY 28: I need to add the text for the objects and find a place to test the code. I already: Fixed all the walls in the rooms. *****#####
- #####***JULY 29: I need to add the items and NPCs in the game. I already: decoded everything and fixed the placement of the walls****######
+ #####***JULY 29: I need to fix the gameplay of the walls. I already: decoded everything.  ****######
+ #####***JULY 30: I need to fix the lists for the objects in game. I already: prepped backgrounds ***####
+ 
  
  
 class Room(object):
@@ -170,6 +229,11 @@ class Room_Cave2 (Room): #walls done
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
+            
+        objects = [] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
            
 class Room_Cave3 (Room): #finsihed these walls
     """This creates all the walls in room 3"""
@@ -187,6 +251,13 @@ class Room_Cave3 (Room): #finsihed these walls
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
+
+            
+        objects = []
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
+ 
  
 class Room_WorldOne (Room):
     """This creates all the walls in room 3"""
@@ -205,6 +276,12 @@ class Room_WorldOne (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
             
+        objects = []
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)           
+        
+            
 class Room_WorldTwo (Room):
     """This creates all the walls in room 3"""
     def __init__(self):
@@ -220,6 +297,11 @@ class Room_WorldTwo (Room):
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)            
+ 
+        objects = []
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
             
 class Room_WorldThree (Room):
     """This creates all the walls in room 3"""
@@ -237,6 +319,12 @@ class Room_WorldThree (Room):
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
+            
+            
+        objects = []
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
 
 class Room_WorldFour (Room):
     """This creates all the walls in room 3"""
@@ -253,7 +341,11 @@ class Room_WorldFour (Room):
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
-
+            
+        objects = []
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
 
 class Room_WorldFive (Room):
     """This creates all the walls in room 3"""
@@ -272,6 +364,12 @@ class Room_WorldFive (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
  
+        objects = []
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
+            
+            
 class Room_WorldSix (Room):
   """This creates all the walls in room 3"""
   def __init__(self):
@@ -287,7 +385,11 @@ class Room_WorldSix (Room):
     for item in walls:
       wall = Wall(item[0], item[1], item[2], item[3], item[4])
       self.wall_list.add(wall)
- 
+      
+      objects = []
+      for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object)
  
 def main():
     """ Main Program """
@@ -337,6 +439,7 @@ def main():
         
     room = Room_WorldSix()
     rooms.append(room)   
+
  
  
     current_room_no = 0
@@ -376,8 +479,8 @@ def main():
  
         # --- Game Logic ---
  
-        player.move(current_room.wall_list)
- 
+        player.move(current_room.wall_list, current_room.object_list)
+      
         if player.rect.x < -15:
             if current_room_no == 1:
                 current_room_no = 5
@@ -473,9 +576,32 @@ def main():
                 player.rect.y = 60
  
         # --- Drawing ---
-        screen.fill(BLACK)
+        ##screen.fill(BLACK)
+        
+        ## Change this to different backgrounds eventually
+        if current_room_no == 0: #bedroom
+          screen.fill(BLACK)
+        elif current_room_no == 1: #cave one
+          screen.fill(BLACK)
+        elif current_room_no == 2: #cave two
+          screen.fill(BLACK)
+        elif current_room_no == 3: #cave three
+          screen.fill(BLACK)
+        elif current_room_no == 4: #world one
+          screen.fill(LIGHTBLUE)
+        elif current_room_no == 5: #world two
+          screen.fill(LIGHTBLUE)
+        elif current_room_no == 6: #world three
+          screen.fill(LIGHTBLUE)
+        elif current_room_no == 7: #world four
+          screen.fill(LIGHTBLUE)
+        elif current_room_no == 8: #world five
+          screen.fill(LIGHTBLUE)
+        elif current_room_no == 9: #world six
+          screen.fill(LIGHTBLUE)
         
         current_room.wall_list.draw(screen)
+        current_room.object_list.draw(screen) ###trying this out
         movingsprites.draw(screen)
         
  
