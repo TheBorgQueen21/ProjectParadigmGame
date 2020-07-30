@@ -1,203 +1,489 @@
 import pygame
-import random
-
-# --- Global constants ---
+ 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 500
-
-over_font = pygame.font.Font('freesansbold.ttf', 20)
-screen_one_background = pygame.image.load("Background_first_draft_finalsize.png").convert()
-screen_two_background = pygame.image.load("cave_background.png").convert()
-screen_three_background = pygame.image.load("Yellow_Background.png").convert()
-
-# --- Classes ---
-
-
-class Block(pygame.sprite.Sprite):
-    """ This class represents a simple block the player collects. """
-
-    def __init__(self):
-        """ Constructor, create the image of the block. """
+PURPLE = (255, 0, 255)
+PINK = (255, 51, 153)
+YELLOW = (255, 255, 51)
+NAVY = (0, 0, 204)
+ORANGE = (255, 128, 0)
+LIGHTPURPLE = (229, 204, 225)
+ 
+ 
+class Wall(pygame.sprite.Sprite):
+    """This class represents the bar at the bottom that the player controls """
+ 
+    def __init__(self, x, y, width, height, color):
+        """ Constructor function """
+ 
+        # Call the parent's constructor
         super().__init__()
-        self.image = pygame.Surface([20, 20])
-        self.image.fill(BLACK)
+ 
+        # Make a BLUE wall, of the size specified in the parameters
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+ 
+        # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
-
-    def reset_pos(self):
-        """ Called when the block is 'collected' or falls off
-            the screen. """
-        self.rect.y = random.randrange(-300, -20)
-        self.rect.x = random.randrange(SCREEN_WIDTH)
-
-    def update(self):
-        """ Automatically called when we need to move the block. """
-        self.rect.y += 1
-
-        if self.rect.y > SCREEN_HEIGHT + self.rect.height:
-            self.reset_pos()
-
-
+        self.rect.y = y
+        self.rect.x = x
+ 
+ 
 class Player(pygame.sprite.Sprite):
-    """ This class represents the player. """
-
+    """ This class represents the bar at the bottom that the
+    player controls """
+ 
+    # Set speed vector
+    change_x = 0
+    change_y = 0
+    
+ 
+    def __init__(self, x, y):
+        """ Constructor function """
+ 
+        # Call the parent's constructor
+        super().__init__()
+ 
+        # Set height, width
+        self.image = pygame.Surface([15, 15])##pygame.image.load('heart.png') 
+        self.image.fill(WHITE)
+ 
+        # Make our top-left corner the passed-in location.
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+ 
+    def changespeed(self, x, y):
+        """ Change the speed of the player. Called with a keypress. """
+        self.change_x += x
+        self.change_y += y
+ 
+    def move(self, walls):
+        """ Find a new position for the player """
+ 
+        # Move left/right
+        self.rect.x += self.change_x
+ 
+        # Did this update cause us to hit a wall?
+        block_hit_list = pygame.sprite.spritecollide(self, walls, False)
+        for block in block_hit_list:
+            # If we are moving right, set our right side to the left side of
+            # the item we hit
+            if self.change_x > 0:
+                self.rect.right = block.rect.left
+            else:
+                # Otherwise if we are moving left, do the opposite.
+                self.rect.left = block.rect.right
+ 
+        # Move up/down
+        self.rect.y += self.change_y
+ 
+        # Check and see if we hit anything
+        block_hit_list = pygame.sprite.spritecollide(self, walls, False)
+        for block in block_hit_list:
+ 
+            # Reset our position based on the top/bottom of the object.
+            if self.change_y > 0:
+                self.rect.bottom = block.rect.top
+            else:
+                self.rect.top = block.rect.bottom
+        
+ #####***JULY 24: I need to fix the walls and where they are placed. I already: Converted the code above, added all the rooms (the rooms don't have correct walls yet)***#####
+ #####***JULY 27: I need to fix the walls' placement. I already: Fixed the order of the rooms ****######
+ #####***JULY 28: I need to add the text for the objects and find a place to test the code. I already: Fixed all the walls in the rooms. *****#####
+ #####***JULY 29: I need to add the items and NPCs in the game. I already: decoded everything and fixed the placement of the walls****######
+ 
+ 
+class Room(object):
+    """ Base class for all rooms. """
+ 
+    # Each room has a list of walls, and of enemy sprites.
+    wall_list = None
+    object_sprites = None
+    chara_sprites = None
+ 
+    def __init__(self):
+        """ Constructor, create our lists. """
+        self.wall_list = pygame.sprite.Group()
+        self.object_sprites = pygame.sprite.Group()
+        self.chara_sprites = pygame.sprite.Group()
+ 
+ 
+class Room_Bedroom (Room): #finished walls
+    """This creates all the walls in room 1"""
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('heart.png')
-        self.playerX = 370
-        self.playerY = 480
-        self.playerX_change = 0
-        self.playerY_change = 0
-
-    def update(self):
-        """ Update the player location. """
-        screen.blit(playerImg, (x, y)) #draws the player on the screen"""
-        player(playerX, playerY)
-
-
-class Game(object):
-    """ This class represents an instance of the game. If we need to
-        reset the game we'd just need to create a new instance of this
-        class. """
-
+        # Make the walls. (x_pos, y_pos, width, height)
+ 
+        # This is a list of walls. Each is in the form [x, y, width, height]
+        walls = [[0, 0, 20, 600, PINK], #left side closed
+                 [780, 0, 20, 600, PINK], #right side closed
+                 [20, 0, 350, 20, PINK], #top open left
+                 [20, 0, 420, 20, PINK], #top open right
+                 [20, 580, 760, 20, PINK], #bottom closed
+                ]
+ 
+ 
+        # Loop through the list. Create the wall, add it to the list
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+ 
+ 
+class Room_Cave1(Room): #walls done
+    """This creates all the walls in room 2"""
     def __init__(self):
-        """ Constructor. Create all our attributes and initialize
-        the game. """
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 250, RED], #left open top
+                 [0, 350, 20, 250, RED], #left open bottom
+                 [780, 0, 20, 250, RED], #right open top
+                 [780, 350, 20, 250, RED], #right open bottom
+                 [20, 0, 350, 20, RED], #top open left
+                 [20, 0, 420, 20, RED], #top open right
+                 [20, 580, 350, 20, RED], #bottom open right
+                 [20, 580, 420, 20, RED], #bottom open right
+                ]
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+ 
+ 
+class Room_Cave2 (Room): #walls done
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 250, WHITE], #left open top
+                 [0, 350, 20, 250, WHITE], #left open bottom
+                 [780, 0, 20, 250, WHITE], #right open top
+                 [780, 350, 20, 250, WHITE], #right open bottom
+                 [20, 0, 350, 20, WHITE], #top open left
+                 [20, 0, 420, 20, WHITE], #top open right
+                 [20, 580, 350, 20, WHITE], #bottom open right
+                 [20, 580, 420, 20, WHITE], #bottom open right
+                ]
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+           
+class Room_Cave3 (Room): #finsihed these walls
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()    
+        walls = [[0, 0, 20, 250, BLUE],
+                 [0, 350, 20, 250, BLUE],
+                 [780, 0, 20, 250, BLUE],
+                 [780, 350, 20, 250, BLUE],
+                 [20, 0, 760, 20, BLUE],
+                 [20, 580, 350, 20, BLUE], #bottom open right
+                 [20, 580, 420, 20, BLUE], #bottom open right
+                ]
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+ 
+class Room_WorldOne (Room):
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 250, PURPLE],
+                 [0, 350, 20, 250, PURPLE],
+                 [780, 0, 20, 600, PURPLE],
+                 [20, 0, 760, 20, PURPLE],
+                 [20, 580, 760, 20, PURPLE]
+                ]
+ 
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+            
+class Room_WorldTwo (Room):
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 600, GREEN], #left closed
+                 [780, 0, 20, 250, GREEN],
+                 [780, 350, 20, 250, GREEN],
+                 [20, 0, 760, 20, GREEN],
+                 [20, 580, 760, 20, GREEN]
+                ]
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)            
+            
+class Room_WorldThree (Room):
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 250, LIGHTPURPLE],
+                 [0, 350, 20, 250, LIGHTPURPLE],
+                 [780, 0, 20, 600, LIGHTPURPLE],
+                 [20, 0, 760, 20, LIGHTPURPLE],
+                 [20, 580, 760, 20, LIGHTPURPLE]
+                ]
+ 
+  
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
 
-        self.score = 0
-        self.game_over = False
+class Room_WorldFour (Room):
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 600, YELLOW], #left closed
+                 [780, 0, 20, 250, YELLOW],
+                 [780, 350, 20, 250, YELLOW],
+                 [20, 0, 760, 20, YELLOW],
+                 [20, 580, 760, 20, YELLOW]
+                ]
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
 
-        # Create sprite lists
-        self.objects_list = pygame.sprite.Group()
-        self.all_object_list = pygame.sprite.Group()
 
-        # Create the player
-        self.player = Player()
-        self.all_sprites_list.add(self.player)
-
-    def process_events(self):
-        """ Process all of the events. Return a "True" if we need
-            to close the window. """
-
+class Room_WorldFive (Room):
+    """This creates all the walls in room 3"""
+    def __init__(self):
+        super().__init__()
+ 
+        walls = [[0, 0, 20, 250, NAVY],
+                 [0, 350, 20, 250, NAVY],
+                 [780, 0, 20, 600, NAVY],
+                 [20, 0, 760, 20, NAVY],
+                 [20, 580, 760, 20, NAVY]
+                ]
+ 
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+ 
+class Room_WorldSix (Room):
+  """This creates all the walls in room 3"""
+  def __init__(self):
+    super().__init__()
+ 
+    walls = [[0, 0, 20, 600, ORANGE], #left closed
+            [780, 0, 20, 250, ORANGE],
+            [780, 350, 20, 250, ORANGE],
+            [20, 0, 760, 20, ORANGE],
+            [20, 580, 760, 20, ORANGE]
+            ]
+ 
+    for item in walls:
+      wall = Wall(item[0], item[1], item[2], item[3], item[4])
+      self.wall_list.add(wall)
+ 
+ 
+def main():
+    """ Main Program """
+ 
+    # Call this function so the Pygame library can initialize itself
+    pygame.init()
+ 
+    # Create an 800x600 sized screen
+    screen = pygame.display.set_mode([800, 600])
+ 
+    # Set the title of the window
+    pygame.display.set_caption('Maze Runner')
+ 
+    # Create the player paddle object
+    player = Player(50, 50)
+    movingsprites = pygame.sprite.Group()
+    movingsprites.add(player)
+ 
+    rooms = []
+ 
+    room = Room_Bedroom()
+    rooms.append(room)
+ 
+    room = Room_Cave1()
+    rooms.append(room)
+ 
+    room = Room_Cave2()
+    rooms.append(room)
+ 
+    room = Room_Cave3()
+    rooms.append(room)
+   
+    room = Room_WorldOne()
+    rooms.append(room)
+    
+    room = Room_WorldTwo()
+    rooms.append(room)
+    
+    room = Room_WorldThree()
+    rooms.append(room)
+    
+    room = Room_WorldFour()
+    rooms.append(room)
+    
+    room = Room_WorldFive()
+    rooms.append(room)
+        
+    room = Room_WorldSix()
+    rooms.append(room)   
+ 
+ 
+    current_room_no = 0
+    current_room = rooms[current_room_no]
+ 
+    clock = pygame.time.Clock()
+ 
+    done = False
+ 
+    while not done:
+ 
+         # --- Event Processing ---
+ 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return True
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.game_over:
-                    self.__init__()
-
-        return False
-
-    def run_logic(self):
-        """
-        This method is run each time through the frame. It
-        updates positions and checks for collisions.
-        """
-        if not self.game_over:
-            # Move all the sprites
-            self.objects_list.update()
-
-            # See if the player block has collided with anything.
-            object_hit_list = pygame.sprite.spritecollide(self.player, self.objects_list, True)
-
-            # Check the list of collisions.
-            for block in blocks_hit_list:
-                self.numberhit += 1
-                if self.numberhit == 6:
-                print("try calling new scene?")
-                # You can do something with "block" here.
-
-            #if len(self.block_list) == 0: #change to somehow making game over?
-                #self.game_over = True
+                done = True
+ 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    player.changespeed(-5, 0)
+                if event.key == pygame.K_RIGHT:
+                    player.changespeed(5, 0)
+                if event.key == pygame.K_UP:
+                    player.changespeed(0, -5)
+                if event.key == pygame.K_DOWN:
+                    player.changespeed(0, 5)
+ 
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    player.changespeed(5, 0)
+                if event.key == pygame.K_RIGHT:
+                    player.changespeed(-5, 0)
+                if event.key == pygame.K_UP:
+                    player.changespeed(0, 5)
+                if event.key == pygame.K_DOWN:
+                    player.changespeed(0, -5)
+ 
+        # --- Game Logic ---
+ 
+        player.move(current_room.wall_list)
+ 
+        if player.rect.x < -15:
+            if current_room_no == 1:
+                current_room_no = 5
+                current_room = rooms[current_room_no]
+                player.rect.x = 790
+            elif current_room_no == 2:
+                current_room_no = 7
+                current_room = rooms[current_room_no]
+                player.rect.x = 790
+            elif current_room_no == 3:
+                current_room_no = 9
+                current_room = rooms[current_room_no]
+                player.rect.x = 790             
+            elif current_room_no == 4:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.x = 790              
+            elif current_room_no == 6:
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.x = 790  
+            elif current_room_no == 8:
+                current_room_no = 3
+                current_room = rooms[current_room_no]
+                player.rect.x = 790                  
+            else:
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.x = 790
+ 
+        if player.rect.x > 801:
+            if current_room_no == 1:
+              current_room_no = 4
+              current_room = rooms[current_room_no]
+              player.rect.x = 60
+            elif current_room_no == 2:
+                current_room_no = 6
+                current_room = rooms[current_room_no]
+                player.rect.x = 60
+            elif current_room_no == 3:
+                current_room_no = 8
+                current_room = rooms[current_room_no]
+                player.rect.x = 60             
+            elif current_room_no == 9:
+                current_room_no = 3
+                current_room = rooms[current_room_no]
+                player.rect.x = 60              
+            elif current_room_no == 7:
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.x = 60 
+            elif current_room_no == 5:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.x = 60                  
+            else:
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.x = 60
                 
-    def spacepress (scripttext, secondtext):
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                pygame.draw.rect(screen,black,(0, 350, 800, 600))
-                first_text = over_font.render(scripttext, True, (255, 255, 255))
-                second_text= over_font.render(secondtext, True, (255, 255, 255))
-                screen.blit (first_text, (20, 400))
-                screen.blit (second_text, (20, 450))
-
-    def display_frame(self, screen):
-        """ Display everything to the screen for the game. """
+                
+        if player.rect.y < -15:
+            if current_room_no == 0:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.y = 550
+            elif current_room_no == 1: ##Something wrong here
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.y = 550
+            elif current_room_no == 2:
+                current_room_no = 3
+                current_room = rooms[current_room_no]
+                player.rect.y = 550
+            else:
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.y = 790
+        if player.rect.y > 601:
+            if current_room_no == 0:
+                player.rect.y = 60
+            elif current_room_no == 2:
+                current_room_no = 1
+                current_room = rooms[current_room_no]
+                player.rect.y = 60
+            elif current_room_no == 3:
+                current_room_no = 2
+                current_room = rooms[current_room_no]
+                player.rect.y = 60
+            else:
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.y = 60
+ 
+        # --- Drawing ---
         screen.fill(BLACK)
-
-        if self.game_over:
-            font = pygame.font.Font("Serif", 25)
-            font = pygame.font.SysFont("serif", 25)
-            text = font.render("Game Over, click to restart", True, BLACK)
-            center_x = (SCREEN_WIDTH // 2) - (text.get_width() // 2)
-            center_y = (SCREEN_HEIGHT // 2) - (text.get_height() // 2)
-            screen.blit(text, [center_x, center_y])
-
-        if not self.game_over:
-            self.all_sprites_list.draw(screen)
-
-        pygame.display.flip()
-
-
-def main():
-    """ Main program function. """
-    # Initialize Pygame and set up the window
-    pygame.init()
-
-    size = [SCREEN_WIDTH, SCREEN_HEIGHT]
-    screen = pygame.display.set_mode(size)
-
-    icon = pygame.image.load ('flower (1).png')
-    pygame.display.set_icon(icon)
-
-    pygame.display.set_caption("Project Paradigm")
-    pygame.mouse.set_visible(False)
-
-    # Create our objects and set the data
-    done = False
-    clock = pygame.time.Clock()
-
-    # Create an instance of the Game class
-    game = Game()
-
-    # Main game loop
-    while not done:
-
-        # Process events (keystrokes, mouse clicks, etc)
-        done = game.process_events()
-
-        # Update object positions, check for collisions
-        game.run_logic()
-
-        # Draw the current frame
-        game.display_frame(screen)
-
-        # Pause for the next frame
-        clock.tick(60)
         
-        #Player Movement
-        if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_LEFT:
-            playerX_change = -0.5
-        if event.key == pygame.K_RIGHT:
-            playerX_change = 0.5
-        if event.key == pygame.K_DOWN:
-            playerY_change = 0.5
-        if event.key == pygame.K_UP:
-            playerY_change = -0.5
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or  event.key == pygame.K_DOWN or event.key == pygame.K_UP:
-                playerX_change = 0
-                playerY_change = 0
-        playerX += playerX_change
-        playerY += playerY_change
-
-
-    # Close window and exit
+        current_room.wall_list.draw(screen)
+        movingsprites.draw(screen)
+        
+ 
+        pygame.display.flip()
+ 
+        clock.tick(60)
+ 
     pygame.quit()
-
-# Call the main function, start up the game
+ 
 if __name__ == "__main__":
     main()
