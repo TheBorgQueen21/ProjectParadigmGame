@@ -94,7 +94,8 @@ class Player(pygame.sprite.Sprite):
  #####***JULY 24: I need to fix the walls and where they are placed. I already: Converted the code above, added all the rooms (the rooms don't have correct walls yet)***#####
  #####***JULY 27: I need to fix the walls' placement. I already: Fixed the order of the rooms ****######
  #####***JULY 28: I need to add the text for the objects and find a place to test the code. I already: Fixed all the walls in the rooms. *****#####
- #####***JULY 29: I need to fix the gameplay of the walls. I already: decoded everything.  ****######
+ #####***JULY 29: I need to add the items and NPCs in the game. I already: decoded everything and fixed the placement of the walls****######
+ 
  
 class Room(object):
     """ Base class for all rooms. """
