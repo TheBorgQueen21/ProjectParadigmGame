@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
  
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -14,19 +15,21 @@ LIGHTPURPLE = (229, 204, 225)
 LIGHTPINK = (255, 204, 255)
 LIGHTBLUE = (204, 255, 255)
 
+over_font = pygame.font.Font('freesansbold.ttf', 20)
+
+
 ####TRYING THIS OUT
-def spacepress (scripttext, secondtext):
+def spacepress (textone, texttwo):
+  for event in pygame.event.get():
     #global sone_item_count
     if event.type == pygame.KEYUP:
-        if event.key == pygame.K_SPACE:
-            pygame.draw.rect(screen, BLACK,(0, 350, 800, 600))
-            first_text = over_font.render(scripttext, True, (255, 255, 255))
-            second_text= over_font.render(secondtext, True, (255, 255, 255))
-            screen.blit (first_text, (20, 400))
-            screen.blit (second_text, (20, 450))
-
-
- 
+      if event.key == pygame.K_SPACE:
+        pygame.draw.rect(screen, WHITE,(0, 350, 800, 600))
+        first_text = over_font.render(textone, True, BLACK)
+        second_text= over_font.render(texttwo, True, BLACK)
+        screen.blit (first_text, (20, 400))
+        screen.blit (second_text, (20, 450))
+   
  
 class Wall(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
@@ -51,7 +54,7 @@ class Wall(pygame.sprite.Sprite):
 class Object(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
  
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, x, y, width, height, color, firsttext, secondtext):
         """ Constructor function """
  
         # Call the parent's constructor
@@ -65,6 +68,11 @@ class Object(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
+        
+        ### space press
+        spacepress(firsttext , secondtext)
+        
+        
  
  
 class Player(pygame.sprite.Sprite):
@@ -153,7 +161,7 @@ class Player(pygame.sprite.Sprite):
  #####***JULY 28: I need to add the text for the objects and find a place to test the code. I already: Fixed all the walls in the rooms. *****#####
  #####***JULY 29: I need to fix the gameplay of the walls. I already: decoded everything.  ****######
  #####***JULY 30: I need to fix the lists for the objects in game. I already: prepped backgrounds ***####
- 
+ #####***JULY 31: I need to fix the spacepress function for object interaction. I already: created a way to make objects in game****#####
  
  
 class Room(object):
@@ -193,9 +201,9 @@ class Room_Bedroom (Room): #finished walls
             self.wall_list.add(wall)
             
             ##x, y, width, height, color
-        objects = [[200, 200, 40, 60, BLUE]] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+        objects = [[200, 200, 40, 60, BLUE, "this is a bed", ""]] ###ADDING THIS TO ALL ROOM CHILD CLASSES
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
+            object = Object(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
             self.object_list.add(object) 
  
 class Room_Cave1(Room): #walls done
@@ -397,7 +405,7 @@ class Room_WorldSix (Room):
       wall = Wall(item[0], item[1], item[2], item[3], item[4])
       self.wall_list.add(wall)
       
-      objects = [[0, 0, 20, 600, ORANGE]]
+      objects = []
       for item in objects:
             object1 = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(object1)
