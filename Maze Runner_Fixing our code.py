@@ -473,7 +473,27 @@ def main():
                 player.rect.y = 60
  
         # --- Drawing ---
-        screen.fill(BLACK)
+        ## Change this to different backgrounds eventually
+        if current_room_no == 0: #bedroom
+          screen.fill(BLACK)
+        elif current_room_no == 1: #cave one
+          screen.fill(BLACK)
+        elif current_room_no == 2: #cave two
+          screen.fill(BLACK)
+        elif current_room_no == 3: #cave three
+          screen.fill(BLACK)
+        elif current_room_no == 4: #world one
+          screen.fill(BLACK)
+        elif current_room_no == 5: #world two
+          screen.fill(BLACK)
+        elif current_room_no == 6: #world three
+          screen.fill(BLACK)
+        elif current_room_no == 7: #world four
+          screen.fill(BLACK)
+        elif current_room_no == 8: #world five
+          screen.fill(BLACK)
+        elif current_room_no == 9: #world six
+          screen.fill(BLACK)
         
         current_room.wall_list.draw(screen)
         movingsprites.draw(screen)
