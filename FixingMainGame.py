@@ -161,13 +161,14 @@ class Room(object):
  
     # Each room has a list of walls, and of enemy sprites.
     wall_list = None
+    object_list = None
     object_sprites = None
     chara_sprites = None
  
     def __init__(self):
         """ Constructor, create our lists. """
         self.wall_list = pygame.sprite.Group()
-        self.object_sprites = pygame.sprite.Group()
+        self.object_list = pygame.sprite.Group()
         self.chara_sprites = pygame.sprite.Group()
  
  
@@ -190,7 +191,12 @@ class Room_Bedroom (Room): #finished walls
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
- 
+            
+            ##x, y, width, height, color
+        objects = [[200, 200, 40, 60, BLUE]] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object) 
  
 class Room_Cave1(Room): #walls done
     """This creates all the walls in room 2"""
@@ -210,7 +216,12 @@ class Room_Cave1(Room): #walls done
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
- 
+            
+            
+        objects = [] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+        for item in objects:
+            object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object) 
  
 class Room_Cave2 (Room): #walls done
     """This creates all the walls in room 3"""
@@ -386,10 +397,10 @@ class Room_WorldSix (Room):
       wall = Wall(item[0], item[1], item[2], item[3], item[4])
       self.wall_list.add(wall)
       
-      objects = []
+      objects = [[0, 0, 20, 600, ORANGE]]
       for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            object1 = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(object1)
  
 def main():
     """ Main Program """
@@ -588,17 +599,17 @@ def main():
         elif current_room_no == 3: #cave three
           screen.fill(BLACK)
         elif current_room_no == 4: #world one
-          screen.fill(LIGHTBLUE)
+          screen.fill(BLACK)
         elif current_room_no == 5: #world two
-          screen.fill(LIGHTBLUE)
+          screen.fill(BLACK)
         elif current_room_no == 6: #world three
-          screen.fill(LIGHTBLUE)
+          screen.fill(BLACK)
         elif current_room_no == 7: #world four
-          screen.fill(LIGHTBLUE)
+          screen.fill(BLACK)
         elif current_room_no == 8: #world five
-          screen.fill(LIGHTBLUE)
+          screen.fill(BLACK)
         elif current_room_no == 9: #world six
-          screen.fill(LIGHTBLUE)
+          screen.fill(BLACK)
         
         current_room.wall_list.draw(screen)
         current_room.object_list.draw(screen) ###trying this out
