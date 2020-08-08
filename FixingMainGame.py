@@ -16,6 +16,7 @@ LIGHTPINK = (255, 204, 255)
 LIGHTBLUE = (204, 255, 255)
 
 over_font = pygame.font.Font('freesansbold.ttf', 20)
+screen = pygame.display.set_mode([800, 600])
 
 
 ####TRYING THIS OUT
@@ -54,7 +55,7 @@ class Wall(pygame.sprite.Sprite):
 class Object(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
  
-    def __init__(self, x, y, width, height, color, firsttext, secondtext):
+    def __init__(self, x, y, width, height, color):
         """ Constructor function """
  
         # Call the parent's constructor
@@ -69,8 +70,6 @@ class Object(pygame.sprite.Sprite):
         self.rect.y = y
         self.rect.x = x
         
-        ### space press
-        spacepress(firsttext , secondtext)
         
         
  
@@ -134,9 +133,10 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.rect.top = block.rect.bottom
                 
-        ###TESTING THIS CODE OUT
-        # Did this update cause us to hit a wall?
+        #### --- OBJECT --- ####
+        #Did this update cause us to hit a wall?
         block_hit_list = pygame.sprite.spritecollide(self, objects, False)
+
         for block in block_hit_list:
             # If we are moving right, set our right side to the left side of
             # the item we hit
@@ -201,7 +201,7 @@ class Room_Bedroom (Room): #finished walls
             self.wall_list.add(wall)
             
             ##x, y, width, height, color
-        objects = [[200, 200, 40, 60, BLUE, "this is a bed", ""]] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
             object = Object(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
             self.object_list.add(object) 
