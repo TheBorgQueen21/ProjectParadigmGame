@@ -19,19 +19,6 @@ over_font = pygame.font.Font('freesansbold.ttf', 20)
 screen = pygame.display.set_mode([800, 600])
 
 
-####TRYING THIS OUT
-def spacepress (textone, texttwo):
-  for event in pygame.event.get():
-    #global sone_item_count
-    if event.type == pygame.KEYUP:
-      if event.key == pygame.K_SPACE:
-        pygame.draw.rect(screen, WHITE,(0, 350, 800, 600))
-        first_text = over_font.render(textone, True, BLACK)
-        second_text= over_font.render(texttwo, True, BLACK)
-        screen.blit (first_text, (20, 400))
-        screen.blit (second_text, (20, 450))
-   
- 
 class Wall(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
  
@@ -69,10 +56,12 @@ class Object(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        
-        
-        
- 
+        self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+    """    
+    def draw_hitbox(self, x, y):
+      self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+      pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
+    """  
  
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the
@@ -97,7 +86,13 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
- 
+        self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+        
+    def draw_hitbox(self, x, y):
+      self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+      pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
+      
+      
     def changespeed(self, x, y):
         """ Change the speed of the player. Called with a keypress. """
         self.change_x += x
@@ -149,7 +144,6 @@ class Player(pygame.sprite.Sprite):
         # Check and see if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, objects, False)
         for block in block_hit_list:
- 
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
                 self.rect.bottom = block.rect.top
@@ -162,6 +156,8 @@ class Player(pygame.sprite.Sprite):
  #####***JULY 29: I need to fix the gameplay of the walls. I already: decoded everything.  ****######
  #####***JULY 30: I need to fix the lists for the objects in game. I already: prepped backgrounds ***####
  #####***JULY 31: I need to fix the spacepress function for object interaction. I already: created a way to make objects in game****#####
+ #####***AUGUST 12: I need to find out how to access the arguments from a class outside the class (so that way I can compare the in game objects to the player's x and y)
+ #####***AUGUST 13: I am in the middle of making hitboxes. I finished making hitboxes for the player, trying to figure out how to do it for the objects
  
  
 class Room(object):
@@ -199,12 +195,22 @@ class Room_Bedroom (Room): #finished walls
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
-            
-            ##x, y, width, height, color
+        
+        ##x, y, width, height, color
         objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
-            self.object_list.add(object) 
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+ 
+            
+            
+        """"    
+        player = Player(50, 50)    
+        new_object = gameobject
+        if player.rect.x > new_object.rect.x:# and player.rect.x < new_object.rect.x: 
+          var1 = 1
+         """ 
+            
  
 class Room_Cave1(Room): #walls done
     """This creates all the walls in room 2"""
@@ -426,7 +432,7 @@ def main():
     player = Player(50, 50)
     movingsprites = pygame.sprite.Group()
     movingsprites.add(player)
- 
+    
     rooms = []
  
     room = Room_Bedroom()
@@ -596,7 +602,10 @@ def main():
  
         # --- Drawing ---
         ##screen.fill(BLACK)
+        var1 = 0
         
+        if var1 == 1:
+          screen.fill(YELLOW)
         ## Change this to different backgrounds eventually
         if current_room_no == 0: #bedroom
           screen.fill(BLACK)
@@ -622,6 +631,16 @@ def main():
         current_room.wall_list.draw(screen)
         current_room.object_list.draw(screen) ###trying this out
         movingsprites.draw(screen)
+        player.draw_hitbox(player.rect.x, player.rect.y)
+        
+     
+        """
+        ###this is to compare the player x and y to the object for the interactions.
+        ###I need to find out how to access the object's width and height for each 
+        new_object = Room_Bedroom()
+        if player.rect.x > new_object.objects[0] + new_object.objects[2] and player.rect.x < new_object.objects[0]: 
+          var1 = 1
+        """ 
         
  
         pygame.display.flip()
