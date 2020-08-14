@@ -56,10 +56,10 @@ class Object(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+        self.hitbox = (self.rect.x-20, self.rect.y-15, 90, 110) # NEW
 
     def draw_hitbox(self, x, y):
-      self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+      self.hitbox = (self.rect.x-20, self.rect.y-15, 90, 110) # NEW
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
 
  
@@ -158,7 +158,7 @@ class Player(pygame.sprite.Sprite):
  #####***JULY 31: I need to fix the spacepress function for object interaction. I already: created a way to make objects in game****#####
  #####***AUGUST 12: I need to find out how to access the arguments from a class outside the class (so that way I can compare the in game objects to the player's x and y)
  #####***AUGUST 13: I am in the middle of making hitboxes. I finished making hitboxes for the player, trying to figure out how to do it for the objects
- 
+ #####***AUGUST 14: I finished making the hitboxes for the player and objects!! Now I need add what happens when they collide
  
 class Room(object):
     """ Base class for all rooms. """
@@ -173,12 +173,6 @@ class Room(object):
         self.wall_list = pygame.sprite.Group()
         self.object_list = pygame.sprite.Group()
         self.chara_sprites = pygame.sprite.Group()
-    """   
-    #'nontype' object is not iterable
-    def hitbox_object():    
-      for item in Room.object_list:
-        Object.draw_hitbox()
-    """
  
  
 class Room_Bedroom (Room): #finished walls
@@ -210,20 +204,6 @@ class Room_Bedroom (Room): #finished walls
             self.object_list.add(game_object) 
             game_object.draw_hitbox(item[0], item[1])
 
-                
-        """def hitbox_object():    
-          for item in objects:
-            Object.draw_hitbox()
-        """
-            
-            
-        """"    
-        player = Player(50, 50)    
-        new_object = gameobject
-        if player.rect.x > new_object.rect.x:# and player.rect.x < new_object.rect.x: 
-          var1 = 1
-         """ 
-            
  
 class Room_Cave1(Room): #walls done
     """This creates all the walls in room 2"""
@@ -245,11 +225,14 @@ class Room_Cave1(Room): #walls done
             self.wall_list.add(wall)
             
             
-        objects = [] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object) 
- 
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
+            
+            
 class Room_Cave2 (Room): #walls done
     """This creates all the walls in room 3"""
     def __init__(self):
@@ -268,10 +251,12 @@ class Room_Cave2 (Room): #walls done
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
             
-        objects = [] ###ADDING THIS TO ALL ROOM CHILD CLASSES
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
            
 class Room_Cave3 (Room): #finsihed these walls
     """This creates all the walls in room 3"""
@@ -291,10 +276,12 @@ class Room_Cave3 (Room): #finsihed these walls
             self.wall_list.add(wall)
 
             
-        objects = []
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
  
  
 class Room_WorldOne (Room):
@@ -314,10 +301,12 @@ class Room_WorldOne (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
             
-        objects = []
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)           
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])    
         
             
 class Room_WorldTwo (Room):
@@ -336,10 +325,12 @@ class Room_WorldTwo (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)            
  
-        objects = []
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
             
 class Room_WorldThree (Room):
     """This creates all the walls in room 3"""
@@ -359,10 +350,12 @@ class Room_WorldThree (Room):
             self.wall_list.add(wall)
             
             
-        objects = []
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
 
 class Room_WorldFour (Room):
     """This creates all the walls in room 3"""
@@ -380,10 +373,12 @@ class Room_WorldFour (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
             
-        objects = []
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
 
 class Room_WorldFive (Room):
     """This creates all the walls in room 3"""
@@ -402,10 +397,12 @@ class Room_WorldFive (Room):
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
  
-        objects = []
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
-            object = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object)
+            game_object = Object(item[0], item[1], item[2], item[3], item[4])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1])
             
             
 class Room_WorldSix (Room):
@@ -424,10 +421,12 @@ class Room_WorldSix (Room):
       wall = Wall(item[0], item[1], item[2], item[3], item[4])
       self.wall_list.add(wall)
       
-      objects = []
+  def draw (self):
+      objects = [[200, 200, 40, 60, BLUE]] 
       for item in objects:
-            object1 = Object(item[0], item[1], item[2], item[3], item[4])
-            self.object_list.add(object1)
+          game_object = Object(item[0], item[1], item[2], item[3], item[4])
+          self.object_list.add(game_object) 
+          game_object.draw_hitbox(item[0], item[1])
  
 def main():
     """ Main Program """
@@ -641,22 +640,8 @@ def main():
         current_room.object_list.draw(screen)
         movingsprites.draw(screen)
         player.draw_hitbox(player.rect.x, player.rect.y)
-        
-        #testingroom = Room_Bedroom()
-        #testingroom.draw()
         current_room.draw()
         
-        """for item in current_room.object_list:
-          Object.draw_hitbox()
-        """
-     
-        """
-        ###this is to compare the player x and y to the object for the interactions.
-        ###I need to find out how to access the object's width and height for each 
-        new_object = Room_Bedroom()
-        if player.rect.x > new_object.objects[0] + new_object.objects[2] and player.rect.x < new_object.objects[0]: 
-          var1 = 1
-        """ 
         
  
         pygame.display.flip()
