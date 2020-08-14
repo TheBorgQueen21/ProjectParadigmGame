@@ -57,11 +57,11 @@ class Object(pygame.sprite.Sprite):
         self.rect.y = y
         self.rect.x = x
         self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
-    """    
+
     def draw_hitbox(self, x, y):
       self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
-    """  
+
  
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the
@@ -166,7 +166,6 @@ class Room(object):
     # Each room has a list of walls, and of enemy sprites.
     wall_list = None
     object_list = None
-    object_sprites = None
     chara_sprites = None
  
     def __init__(self):
@@ -174,6 +173,12 @@ class Room(object):
         self.wall_list = pygame.sprite.Group()
         self.object_list = pygame.sprite.Group()
         self.chara_sprites = pygame.sprite.Group()
+    """   
+    #'nontype' object is not iterable
+    def hitbox_object():    
+      for item in Room.object_list:
+        Object.draw_hitbox()
+    """
  
  
 class Room_Bedroom (Room): #finished walls
@@ -197,11 +202,19 @@ class Room_Bedroom (Room): #finished walls
             self.wall_list.add(wall)
         
         ##x, y, width, height, color
+        
+    def draw (self):
         objects = [[200, 200, 40, 60, BLUE]] 
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
- 
+            game_object.draw_hitbox(item[0], item[1])
+
+                
+        """def hitbox_object():    
+          for item in objects:
+            Object.draw_hitbox()
+        """
             
             
         """"    
@@ -602,10 +615,6 @@ def main():
  
         # --- Drawing ---
         ##screen.fill(BLACK)
-        var1 = 0
-        
-        if var1 == 1:
-          screen.fill(YELLOW)
         ## Change this to different backgrounds eventually
         if current_room_no == 0: #bedroom
           screen.fill(BLACK)
@@ -629,10 +638,17 @@ def main():
           screen.fill(BLACK)
         
         current_room.wall_list.draw(screen)
-        current_room.object_list.draw(screen) ###trying this out
+        current_room.object_list.draw(screen)
         movingsprites.draw(screen)
         player.draw_hitbox(player.rect.x, player.rect.y)
         
+        #testingroom = Room_Bedroom()
+        #testingroom.draw()
+        current_room.draw()
+        
+        """for item in current_room.object_list:
+          Object.draw_hitbox()
+        """
      
         """
         ###this is to compare the player x and y to the object for the interactions.
