@@ -15,7 +15,8 @@ LIGHTPURPLE = (229, 204, 225)
 LIGHTPINK = (255, 204, 255)
 LIGHTBLUE = (204, 255, 255)
 
-over_font = pygame.font.Font('freesansbold.ttf', 20)
+
+game_font = pygame.font.Font('freesansbold.ttf', 15)
 screen = pygame.display.set_mode([800, 600])
 
 
@@ -38,7 +39,6 @@ class Wall(pygame.sprite.Sprite):
         self.rect.x = x
         
         
-###TESTING THIS OUT
 class Object(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
  
@@ -51,16 +51,30 @@ class Object(pygame.sprite.Sprite):
         # Make a BLUE wall, of the size specified in the parameters
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
+        self.width = width
+        self.height = height
  
         # Make our top-left corner the passed-in location.
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        self.hitbox = (self.rect.x-20, self.rect.y-15, 90, 110) # NEW
+        self.hitbox = (self.rect.x-20, self.rect.y-15, self.width+10, self.height+15) # NEW
 
-    def draw_hitbox(self, x, y):
-      self.hitbox = (self.rect.x-20, self.rect.y-15, 90, 110) # NEW
+    def draw_hitbox(self, x, y, width, height):
+      self.hitbox = (self.rect.x-20, self.rect.y-15, self.width+10, self.height+15) # NEW
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
+    
+    def hit(self):
+      pygame.draw.rect(screen, WHITE, (0, 350, 800, 600))
+      first_text = game_font.render("Hello! My name is Anika", True, BLUE)
+      second_text= game_font.render("I hope this works!", True, BLUE)
+      screen.blit (first_text, (20, 400))
+      screen.blit (second_text, (20, 450))
+      
+    def hit_hitbox (self, playerx, playery, player2, player3):
+      if playery < self.hitbox[1] + self.hitbox[3] and playery + player3 > self.hitbox[1]:
+        if playerx + player2 > self.hitbox[0] and playerx < self.hitbox[0] + self.hitbox[2]:
+          self.hit()
 
  
 class Player(pygame.sprite.Sprite):
@@ -86,10 +100,11 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+        self.hitbox = (self.rect.x-15, self.rect.y-15, 42, 42) # NEW
+
         
     def draw_hitbox(self, x, y):
-      self.hitbox = (self.rect.x-10, self.rect.y-15, 42, 42) # NEW
+      self.hitbox = (self.rect.x-15, self.rect.y-15, 42, 42) # NEW
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
       
       
@@ -160,6 +175,8 @@ class Player(pygame.sprite.Sprite):
  #####***AUGUST 13: I am in the middle of making hitboxes. I finished making hitboxes for the player, trying to figure out how to do it for the objects
  #####***AUGUST 14: I finished making the hitboxes for the player and objects!! Now I need add what happens when they collide
  
+player = Player(50, 50)
+ 
 class Room(object):
     """ Base class for all rooms. """
  
@@ -195,14 +212,17 @@ class Room_Bedroom (Room): #finished walls
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
         
-        ##x, y, width, height, color
         
     def draw (self):
-        objects = [[200, 200, 40, 60, BLUE]] 
+        objects = [[200, 200, 40, 60, BLUE], 
+                    [500, 300, 100, 80, GREEN] 
+                  ]
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
+                
 
  
 class Room_Cave1(Room): #walls done
@@ -230,8 +250,8 @@ class Room_Cave1(Room): #walls done
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
-            
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
             
 class Room_Cave2 (Room): #walls done
     """This creates all the walls in room 3"""
@@ -256,7 +276,8 @@ class Room_Cave2 (Room): #walls done
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
            
 class Room_Cave3 (Room): #finsihed these walls
     """This creates all the walls in room 3"""
@@ -281,7 +302,8 @@ class Room_Cave3 (Room): #finsihed these walls
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
  
  
 class Room_WorldOne (Room):
@@ -306,7 +328,8 @@ class Room_WorldOne (Room):
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])    
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
         
             
 class Room_WorldTwo (Room):
@@ -330,7 +353,8 @@ class Room_WorldTwo (Room):
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
             
 class Room_WorldThree (Room):
     """This creates all the walls in room 3"""
@@ -355,7 +379,8 @@ class Room_WorldThree (Room):
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
 
 class Room_WorldFour (Room):
     """This creates all the walls in room 3"""
@@ -378,7 +403,8 @@ class Room_WorldFour (Room):
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
 
 class Room_WorldFive (Room):
     """This creates all the walls in room 3"""
@@ -402,7 +428,8 @@ class Room_WorldFive (Room):
         for item in objects:
             game_object = Object(item[0], item[1], item[2], item[3], item[4])
             self.object_list.add(game_object) 
-            game_object.draw_hitbox(item[0], item[1])
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
             
             
 class Room_WorldSix (Room):
@@ -426,7 +453,8 @@ class Room_WorldSix (Room):
       for item in objects:
           game_object = Object(item[0], item[1], item[2], item[3], item[4])
           self.object_list.add(game_object) 
-          game_object.draw_hitbox(item[0], item[1])
+          game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+          game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
  
 def main():
     """ Main Program """
@@ -441,9 +469,11 @@ def main():
     pygame.display.set_caption('Maze Runner')
  
     # Create the player paddle object
-    player = Player(50, 50)
+    ##player = Player(50, 50)
     movingsprites = pygame.sprite.Group()
     movingsprites.add(player)
+    
+    #Create Game Object Paddle Object
     
     rooms = []
  
@@ -515,7 +545,6 @@ def main():
                     player.changespeed(0, -5)
  
         # --- Game Logic ---
- 
         player.move(current_room.wall_list, current_room.object_list)
       
         if player.rect.x < -15:
@@ -547,7 +576,6 @@ def main():
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.x = 790
- 
         if player.rect.x > 801:
             if current_room_no == 1:
               current_room_no = 4
@@ -577,8 +605,6 @@ def main():
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.x = 60
-                
-                
         if player.rect.y < -15:
             if current_room_no == 0:
                 current_room_no = 1
@@ -613,7 +639,7 @@ def main():
                 player.rect.y = 60
  
         # --- Drawing ---
-        ##screen.fill(BLACK)
+        #screen.fill(BLACK)
         ## Change this to different backgrounds eventually
         if current_room_no == 0: #bedroom
           screen.fill(BLACK)
@@ -642,8 +668,8 @@ def main():
         player.draw_hitbox(player.rect.x, player.rect.y)
         current_room.draw()
         
-        
- 
+        new_room = Room_Bedroom()
+
         pygame.display.flip()
  
         clock.tick(60)
