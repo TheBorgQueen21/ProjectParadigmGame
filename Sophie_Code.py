@@ -38,7 +38,7 @@ while not game_over:
   
   x1 += x1_change
   y1 += y1_change
-  dis.fill(black) # to change background color put dis.fill(color) make sure the color is defined earlier in code
+  dis.fill(black) # changes background color
   pygame.draw.rect(dis, green, [x1, y1, 10, 10])
   
   pygame.display.update()
