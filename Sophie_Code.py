@@ -23,9 +23,13 @@ snake_speed = 15
 font_style = pygame.font.SysFont(None, 50)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
+def our_snake(snake_block, snake_list):
+    for x in snake_list:
+        pygame.draw.rect(dis, green, [x[0], x[1], snake_block, snake_block])
+
 def message(msg, color):
   mesg = font_style.render(msg, True, color)
-  dis.blit(mesg, [dis_width/15, dis_height/3]) # Controls where messages appear
+  dis.blit(mesg, [dis_width/20, dis_height/3]) # Controls where messages appear
 
   
 def gameLoop(): # Creates a function
@@ -37,6 +41,9 @@ def gameLoop(): # Creates a function
 
   x1_change = 0
   y1_change = 0
+
+  snake_List = []
+  Length_of_snake = 1
   
   foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0 # Controls x value location of food I think
   foody = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0 # Controls y value location of food I think
@@ -79,12 +86,27 @@ def gameLoop(): # Creates a function
     x1 += x1_change
     y1 += y1_change
     dis.fill(black) # changes background color
-    pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
-    pygame.draw.rect(dis, white, [x1, y1, snake_block, snake_block])
+    pygame.draw.rect(dis, white, [foodx, foody, snake_block, snake_block])
+    snake_head = []
+    snake_head.append(x1)
+    snake_head.append(y1)
+    snake_List.append(snake_head)
+    if len(snake_List) > Length_of_snake:
+        del snake_List[0]
+        
+    for x in snake_List[:-1]:
+        if x == snake_head:
+            game_close = True
+            
+    our_snake(snake_block, snake_List)
+
     pygame.display.update()
     
-    if x1 == foodx and y1 == foody:
-      print("Yum!")
+    if x1 == foodx and y1 == foody: # If the snake collides with the food
+        foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+        foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+        Length_of_snake += 1
+    
     clock.tick(snake_speed)
 
   pygame.quit
