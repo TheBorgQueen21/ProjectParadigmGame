@@ -16,8 +16,22 @@ LIGHTPINK = (255, 204, 255)
 LIGHTBLUE = (204, 255, 255)
 PEACH = (255,228,181)
 
+wizard = 0
+wizardwords = "I am a wizard :)"
+randomvar = 0
 
-game_font = pygame.font.Font('freesansbold.ttf', 15)
+caveoneWall = [[0, 0, 20, 250, RED], #left open top
+                 [0, 350, 20, 250, RED], #left open bottom
+                 [780, 0, 20, 250, RED], #right open top
+                 [780, 350, 20, 250, RED], #right open bottom
+                 [20, 0, 350, 20, RED], #top open left
+                 [20, 0, 420, 20, RED], #top open right
+                 [20, 580, 350, 20, RED], #bottom open right
+                 [20, 580, 420, 20, RED], #bottom open right
+                 [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
+                 ]
+
+game_font=pygame.font.Font('freesansbold.ttf', 15)
 screen = pygame.display.set_mode([800, 600])
 
 
@@ -112,12 +126,31 @@ class Sprite (pygame.sprite.Sprite):
       second_text= game_font.render(self.bottomtext, True, BLUE)
       screen.blit (first_text, (20, 400))
       screen.blit (second_text, (20, 450))
+      if self.toptext == wizardwords:
+        ##screen.fill(YELLOW)
+        ##caveoneWall.pop(8) --> not working, says the index is out of range
+        while len(caveoneWall) >= 9:
+          caveoneWall.remove([0, 350, 800, 20, GREEN])
+          
+        
+      """if self.toptext == wizardwords: 
+        #screen.fill(YELLOW)
+        while len(caveoneWall) >= 8:
+          screen.fill(YELLOW)
+          ##caveoneWall.pop(8)"""
+      """while len(caveoneWall) >= 9:
+        ##screen.fill(BLUE)
+        if self.toptext == wizardwords: 
+          screen.fill(YELLOW)
+          caveoneWall.pop(8)"""
+        
+      
       
     def hit_hitbox (self, playerx, playery, player2, player3):
       if playery < self.hitbox[1] + self.hitbox[3] and playery + player3 > self.hitbox[1]:
         if playerx + player2 > self.hitbox[0] and playerx < self.hitbox[0] + self.hitbox[2]:
           self.hit()
- 
+          
  
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the
@@ -241,7 +274,7 @@ class Player(pygame.sprite.Sprite):
  #####***AUGUST 19: I finished adding the collisions for hitboxes and the text comes up when collided
  ################## I need to figure out how to make text appear and disappear when pressed.
  
- 
+newcaveoneWall = caveoneWall 
 player = Player(50, 50)
  
 class Room(object):
@@ -290,13 +323,13 @@ class Room_Bedroom (Room): #finished walls
             game_object.draw_hitbox(item[0], item[1], item[2], item[3])
             game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
                 
-        sprites = [[200, 300, 50, 50, PEACH, "This is a character", "Hello!!"]
-                  ]
+        sprites = []                  
         for item in sprites:
             npc_Sprite = Sprite(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
             self.chara_sprites.add(npc_Sprite) 
             npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
-            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
+            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
+            
                 
  
 class Room_Cave1(Room): #walls done
@@ -304,15 +337,17 @@ class Room_Cave1(Room): #walls done
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, RED], #left open top
-                 [0, 350, 20, 250, RED], #left open bottom
-                 [780, 0, 20, 250, RED], #right open top
-                 [780, 350, 20, 250, RED], #right open bottom
-                 [20, 0, 350, 20, RED], #top open left
-                 [20, 0, 420, 20, RED], #top open right
-                 [20, 580, 350, 20, RED], #bottom open right
-                 [20, 580, 420, 20, RED], #bottom open right
-                ]
+        walls = newcaveoneWall
+                #[[0, 0, 20, 250, RED], #left open top
+                 #[0, 350, 20, 250, RED], #left open bottom
+                 #[780, 0, 20, 250, RED], #right open top
+                 #[780, 350, 20, 250, RED], #right open bottom
+                 #[20, 0, 350, 20, RED], #top open left
+                 #[20, 0, 420, 20, RED], #top open right
+                 #[20, 580, 350, 20, RED], #bottom open right
+                 #[20, 580, 420, 20, RED], #bottom open right
+                 #[0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
+                #]
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -327,13 +362,14 @@ class Room_Cave1(Room): #walls done
             game_object.draw_hitbox(item[0], item[1], item[2], item[3])
             game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
             
-        sprites = [[200, 300, 20, 20, PEACH, "This is a character", "Hello!!"]
-                  ]
+        sprites = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"],]
         for item in sprites:
             npc_Sprite = Sprite(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
             self.chara_sprites.add(npc_Sprite) 
             npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
-            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
+            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])
+            
+
                 
 class Room_Cave2 (Room): #walls done
     """This creates all the walls in room 3"""
@@ -435,7 +471,7 @@ class Room_WorldOne (Room):
             npc_Sprite = Sprite(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
             self.chara_sprites.add(npc_Sprite) 
             npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
-            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
+            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])
                         
             
 class Room_WorldTwo (Room):
@@ -795,8 +831,12 @@ def main():
         ## Change this to different backgrounds eventually
         if current_room_no == 0: #bedroom
           screen.fill(BLACK)
+          ### FAKE WALL IN BEDROOM 
+          pygame.draw.rect(screen, PINK, (0, 0, 800, 20) )
         elif current_room_no == 1: #cave one
           screen.fill(BLACK)
+          if randomvar == 1:
+            screen.fill(YELLOW)
         elif current_room_no == 2: #cave two
           screen.fill(BLACK)
         elif current_room_no == 3: #cave three
@@ -813,6 +853,13 @@ def main():
           screen.fill(BLACK)
         elif current_room_no == 9: #world six
           screen.fill(BLACK)
+        
+        ###Figure out how to take away wall after talking to wizard
+
+        
+        """if hit.first_text == wizardwords: 
+          screen.fill(YELLOW)
+          ##cave1.sprites.pop(8)"""
         
         current_room.wall_list.draw(screen)
         current_room.object_list.draw(screen)
