@@ -1,5 +1,6 @@
 import pygame
 pygame.init()
+import pong
  
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -19,6 +20,8 @@ PEACH = (255,228,181)
 wizard = 0
 wizardwords = "I am a wizard :)"
 randomvar = 0
+charatext = "Hi! I'm a gardener"
+
 
 caveoneWall = [[0, 0, 20, 250, RED], #left open top
                  [0, 350, 20, 250, RED], #left open bottom
@@ -28,7 +31,7 @@ caveoneWall = [[0, 0, 20, 250, RED], #left open top
                  [20, 0, 420, 20, RED], #top open right
                  [20, 580, 350, 20, RED], #bottom open right
                  [20, 580, 420, 20, RED], #bottom open right
-                 [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
+                 ##[0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
                  ]
 
 game_font=pygame.font.Font('freesansbold.ttf', 15)
@@ -121,7 +124,7 @@ class Sprite (pygame.sprite.Sprite):
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
     
     def hit(self):
-      pygame.draw.rect(screen, WHITE, (0, 350, 800, 600))
+      pygame.draw.rect(screen, WHITE, (0, 400, 800, 600)) #350
       first_text = game_font.render(self.toptext, True, BLUE)
       second_text= game_font.render(self.bottomtext, True, BLUE)
       screen.blit (first_text, (20, 400))
@@ -131,6 +134,34 @@ class Sprite (pygame.sprite.Sprite):
         ##caveoneWall.pop(8) --> not working, says the index is out of range
         while len(caveoneWall) >= 9:
           caveoneWall.remove([0, 350, 800, 20, GREEN])
+      
+      ##Trying to make minigame appear when play touches the sprite and presses space
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          done = True
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_LEFT:
+            player.changespeed(-5, 0)
+          if event.key == pygame.K_RIGHT:
+            player.changespeed(5, 0)
+          if event.key == pygame.K_UP:
+             player.changespeed(0, -5)
+          if event.key == pygame.K_DOWN:
+             player.changespeed(0, 5)
+        if event.type == pygame.KEYUP:
+          if event.key == pygame.K_LEFT:
+            player.changespeed(5, 0)
+          if event.key == pygame.K_RIGHT:
+            player.changespeed(-5, 0)
+          if event.key == pygame.K_UP:
+            player.changespeed(0, 5)
+          if event.key == pygame.K_DOWN:
+            player.changespeed(0, -5)
+
+        """if event.key == pygame.K_SPACE:
+          if self.toptext == charatext:
+            pong_game()##name 'pong_game' is not defined"""
+            
           
         
       """if self.toptext == wizardwords: 
@@ -240,7 +271,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.rect.top = block.rect.bottom
          
-        ###---NPC Sprites ---###      
+        ###---NPC Sprites ---###    
         #Did this update cause us to hit a wall?
         block_hit_list = pygame.sprite.spritecollide(self, sprites, False)
 
@@ -273,8 +304,7 @@ class Player(pygame.sprite.Sprite):
  #####***AUGUST 14: I finished making the hitboxes for the player and objects!! Now I need add what happens when they collide
  #####***AUGUST 19: I finished adding the collisions for hitboxes and the text comes up when collided
  ################## I need to figure out how to make text appear and disappear when pressed.
- 
-newcaveoneWall = caveoneWall 
+
 player = Player(50, 50)
  
 class Room(object):
@@ -337,17 +367,17 @@ class Room_Cave1(Room): #walls done
     def __init__(self):
         super().__init__()
  
-        walls = newcaveoneWall
-                #[[0, 0, 20, 250, RED], #left open top
-                 #[0, 350, 20, 250, RED], #left open bottom
-                 #[780, 0, 20, 250, RED], #right open top
-                 #[780, 350, 20, 250, RED], #right open bottom
-                 #[20, 0, 350, 20, RED], #top open left
-                 #[20, 0, 420, 20, RED], #top open right
-                 #[20, 580, 350, 20, RED], #bottom open right
-                 #[20, 580, 420, 20, RED], #bottom open right
-                 #[0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
-                #]
+        walls = caveoneWall
+        """[[0, 0, 20, 250, RED], #left open top
+                [0, 350, 20, 250, RED], #left open bottom
+                [780, 0, 20, 250, RED], #right open top
+                [780, 350, 20, 250, RED], #right open bottom
+                [20, 0, 350, 20, RED], #top open left
+                [20, 0, 420, 20, RED], #top open right
+                [20, 580, 350, 20, RED], #bottom open right
+                [20, 580, 420, 20, RED], #bottom open right
+                [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
+                ]"""  #newcaveoneWall
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -405,7 +435,7 @@ class Room_Cave2 (Room): #walls done
             npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
             npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
                            
-class Room_Cave3 (Room): #finsihed these walls
+class Room_Cave3 (Room):
     """This creates all the walls in room 3"""
     def __init__(self):
         super().__init__()    
@@ -465,7 +495,7 @@ class Room_WorldOne (Room):
             game_object.draw_hitbox(item[0], item[1], item[2], item[3])
             game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
 
-        sprites = [[200, 300, 20, 20, PEACH, "This is a character", "Hello!!"]
+        sprites = [[200, 300, 20, 20, PEACH, charatext, "Hello!!"]
                   ]
         for item in sprites:
             npc_Sprite = Sprite(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
@@ -825,8 +855,7 @@ def main():
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.y = 60
- 
-        # --- Drawing ---
+         # --- Drawing ---
         #screen.fill(BLACK)
         ## Change this to different backgrounds eventually
         if current_room_no == 0: #bedroom
