@@ -1,4 +1,6 @@
 import pygame
+import time
+import random
 pygame.init()
 import pong
  
@@ -16,6 +18,11 @@ LIGHTPURPLE = (229, 204, 225)
 LIGHTPINK = (255, 204, 255)
 LIGHTBLUE = (204, 255, 255)
 PEACH = (255,228,181)
+
+controltext = "Controls: Use Arrow Keys to Move"
+controltext2 =  "Move to objects to interact"
+controltext3 = "Move away from objects to stop"
+
 
 wizard = 0
 wizardwords = "I am a wizard :)"
@@ -37,7 +44,62 @@ caveoneWall = [[0, 0, 20, 250, RED], #left open top
 game_font=pygame.font.Font('freesansbold.ttf', 15)
 screen = pygame.display.set_mode([800, 600])
 
+def text_objects(text, font):
+    textSurface = font.render(text, True, BLACK)
+    return textSurface, textSurface.get_rect()
 
+def button(msg,x,y,w,h,ic,ac,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(screen, ac,(x,y,w,h))
+
+        if click[0] == 1 and action != None:
+            action()         
+    else:
+        pygame.draw.rect(screen, ic,(x,y,w,h))
+
+    smallText = pygame.font.SysFont("comicsansms",20)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    screen.blit(textSurf, textRect)
+   
+def main():
+
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            #print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                
+        screen.fill(WHITE)
+        largeText = pygame.font.SysFont("comicsansms",115)
+        TextSurf, TextRect = text_objects("Project Paradigm", largeText)
+        TextRect.center = ((800/2),200)
+        screen.blit(TextSurf, TextRect)
+        
+        smalltext = pygame.font.SysFont("comicsansms",50)
+        TextSurf2, TextRect2 = text_objects(controltext, smalltext)
+        TextRect2.center = (400, 350)
+        screen.blit(TextSurf2, TextRect2)
+        
+        TextSurf3, TextRect3 = text_objects(controltext2, smalltext)
+        TextRect3.center = (400, 400)
+        screen.blit(TextSurf3, TextRect3)
+        
+        TextSurf4, TextRect4 = text_objects(controltext3, smalltext)
+        TextRect4.center = (400, 450)
+        screen.blit(TextSurf4, TextRect4)
+        
+        button("Play",355,500,100,50,GREEN,GREEN, main_game)
+        
+        pygame.display.update()
+        #clock.tick(15)
+    
+        
 class Wall(pygame.sprite.Sprite):
     """This class represents the bar at the bottom that the player controls """
  
@@ -124,7 +186,7 @@ class Sprite (pygame.sprite.Sprite):
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
     
     def hit(self):
-      pygame.draw.rect(screen, WHITE, (0, 400, 800, 600)) #350
+      pygame.draw.rect(screen, WHITE, (0, 350, 800, 600))
       first_text = game_font.render(self.toptext, True, BLUE)
       second_text= game_font.render(self.bottomtext, True, BLUE)
       screen.blit (first_text, (20, 400))
@@ -672,9 +734,9 @@ class Room_WorldSix (Room):
           self.chara_sprites.add(npc_Sprite) 
           npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
           npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
-                
+
                  
-def main():
+def main_game():
     """ Main Program """
  
     # Call this function so the Pygame library can initialize itself
@@ -684,7 +746,7 @@ def main():
     screen = pygame.display.set_mode([800, 600])
  
     # Set the title of the window
-    pygame.display.set_caption('Maze Runner')
+    pygame.display.set_caption('Project Paradigm')
  
     # Create the player paddle object
     ##player = Player(50, 50)
@@ -905,4 +967,4 @@ def main():
     pygame.quit()
  
 if __name__ == "__main__":
-    main()
+  main()
