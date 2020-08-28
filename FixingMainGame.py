@@ -21,7 +21,7 @@ PEACH = (255,228,181)
 
 controltext = "Controls: Use Arrow Keys to Move"
 controltext2 =  "Move to objects to interact"
-controltext3 = "Move away from objects to stop"
+controltext3 = "Move away from objects to stop interacting"
 
 
 wizard = 0
