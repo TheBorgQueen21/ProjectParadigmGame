@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 pygame.init()
-import pong
+##import pong
  
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
