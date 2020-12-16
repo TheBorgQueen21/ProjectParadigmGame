@@ -4,6 +4,9 @@ import random
 pygame.init()
 ##import pong
  
+ 
+ 
+ ##create new room for caveonewalls with new walls
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
@@ -28,9 +31,10 @@ wizard = 0
 wizardwords = "I am a wizard :)"
 randomvar = 0
 charatext = "Hi! I'm a gardener"
+atwizard = True
 
 
-
+"""global caveoneWall
 caveoneWall = [[0, 0, 20, 250, RED], #left open top
                  [0, 350, 20, 250, RED], #left open bottom
                  [780, 0, 20, 250, RED], #right open top
@@ -40,7 +44,7 @@ caveoneWall = [[0, 0, 20, 250, RED], #left open top
                  [20, 580, 350, 20, RED], #bottom open right
                  [20, 580, 420, 20, RED], #bottom open right
                  [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
-                 ]
+                 ]"""
 
 game_font=pygame.font.Font('freesansbold.ttf', 15)
 screen = pygame.display.set_mode([800, 600])
@@ -118,9 +122,9 @@ class Wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        
-        
-class Object(pygame.sprite.Sprite):
+  
+              
+class Object (pygame.sprite.Sprite): ####change object to item?? game_object
     """This class represents the bar at the bottom that the player controls """
  
     def __init__(self, x, y, width, height, color, toptext, bottomtext):
@@ -187,16 +191,24 @@ class Sprite (pygame.sprite.Sprite):
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
     
     def hit(self):
-      atwizard = False;
+      #atwizard = False
       pygame.draw.rect(screen, WHITE, (0, 350, 800, 600))
       first_text = game_font.render(self.toptext, True, BLUE)
       second_text= game_font.render(self.bottomtext, True, BLUE)
       screen.blit (first_text, (20, 400))
       screen.blit (second_text, (20, 450))
-      if self.toptext == wizardwords and atwizard == False:
+      #caveoneWall = globals () ['caveoneWall']
+      #if self.toptext == wizardwords and atwizard == False and len(walls) == 9:
+      if self.toptext == wizardwords:
+        atwizard = False
+        #screen.fill(PINK)
+        #caveoneWall.pop(len(caveoneWall) - 1) #--> not working, says the index is out of range
+        #caveoneWall.pop(0)
+        ##walls[8] = [0, 350, 800, 20, RED]
         ##screen.fill(YELLOW)
-        caveoneWall.pop(len(caveoneWall) - 1) #--> not working, says the index is out of range
-        atwizard = True
+        
+        
+        ##atwizard = True
         #while len(caveoneWall) >= 9:
           #caveoneWall.remove([0, 350, 800, 20, GREEN])
       
@@ -225,7 +237,8 @@ class Sprite (pygame.sprite.Sprite):
 
         """if event.key == pygame.K_SPACE:
           if self.toptext == charatext:
-            pong_game()##name 'pong_game' is not defined"""
+            pong_game()"""
+            ##name 'pong_game' is not defined
             
           
         
@@ -432,8 +445,8 @@ class Room_Cave1(Room): #walls done
     def __init__(self):
         super().__init__()
  
-        walls = caveoneWall
-        """[[0, 0, 20, 250, RED], #left open top
+        global walls
+        walls = [[0, 0, 20, 250, RED], #left open top
                 [0, 350, 20, 250, RED], #left open bottom
                 [780, 0, 20, 250, RED], #right open top
                 [780, 350, 20, 250, RED], #right open bottom
@@ -442,7 +455,46 @@ class Room_Cave1(Room): #walls done
                 [20, 580, 350, 20, RED], #bottom open right
                 [20, 580, 420, 20, RED], #bottom open right
                 [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
-                ]"""  #newcaveoneWall
+                ]  #newcaveoneWall
+ 
+        for item in walls:
+            wall = Wall(item[0], item[1], item[2], item[3], item[4])
+            self.wall_list.add(wall)
+            
+    global sprites1        
+    sprites1 = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
+    
+    def draw (self):
+        objects = [[200, 200, 40, 60, BLUE, "text here", "wow, this works!!"]] 
+        for item in objects:
+            game_object = Object(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
+            self.object_list.add(game_object) 
+            game_object.draw_hitbox(item[0], item[1], item[2], item[3])
+            game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
+            
+        #sprites = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
+        for item in sprites1:
+            npc_Sprite = Sprite(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
+            self.chara_sprites.add(npc_Sprite) 
+            npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
+            npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])
+            
+class Room_replace_Cave1(Room): #walls done
+    """This creates all the walls in room 2"""
+    def __init__(self):
+        super().__init__()
+ 
+        global walls
+        walls = [[0, 0, 20, 250, RED], #left open top
+                [0, 350, 20, 250, RED], #left open bottom
+                [780, 0, 20, 250, RED], #right open top
+                [780, 350, 20, 250, RED], #right open bottom
+                [20, 0, 350, 20, RED], #top open left
+                [20, 0, 420, 20, RED], #top open right
+                [20, 580, 350, 20, RED], #bottom open right
+                [20, 580, 420, 20, RED], #bottom open right
+                #[20, 580, 760, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
+                ]  #newcaveoneWall
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -560,6 +612,7 @@ class Room_WorldOne (Room):
             game_object.draw_hitbox(item[0], item[1], item[2], item[3])
             game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
 
+        
         sprites = [[200, 300, 20, 20, PEACH, charatext, "Hello!!"]
                   ]
         for item in sprites:
@@ -827,6 +880,14 @@ def main_game():
                 if event.key == pygame.K_DOWN:
                     player.changespeed(0, -5)
  
+ 
+        if current_room == 1 and sprites1[0][5] == wizardwords:
+          room.pop(1)
+          room.insert(1, Room_replace_Cave1())
+          ##room[1] = Room_replace_Cave1()
+          screen.fill(YELLOW)
+          
+          
         # --- Game Logic ---
         player.move(current_room.wall_list, current_room.object_list, current_room.chara_sprites)
       
@@ -951,6 +1012,8 @@ def main_game():
         ###Figure out how to take away wall after talking to wizard
 
         
+        
+        
         """if hit.first_text == wizardwords: 
           screen.fill(YELLOW)
           ##cave1.sprites.pop(8)"""
@@ -971,3 +1034,4 @@ def main_game():
  
 if __name__ == "__main__":
   main()
+
