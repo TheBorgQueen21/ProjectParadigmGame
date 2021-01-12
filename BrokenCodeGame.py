@@ -31,20 +31,12 @@ wizard = 0
 wizardwords = "I am a wizard :)"
 randomvar = 0
 charatext = "Hi! I'm a gardener"
-atwizard = True
 
+global atwizard
+atwizard = False
 
-"""global caveoneWall
-caveoneWall = [[0, 0, 20, 250, RED], #left open top
-                 [0, 350, 20, 250, RED], #left open bottom
-                 [780, 0, 20, 250, RED], #right open top
-                 [780, 350, 20, 250, RED], #right open bottom
-                 [20, 0, 350, 20, RED], #top open left
-                 [20, 0, 420, 20, RED], #top open right
-                 [20, 580, 350, 20, RED], #bottom open right
-                 [20, 580, 420, 20, RED], #bottom open right
-                 [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
-                 ]"""
+global score
+score = 1
 
 game_font=pygame.font.Font('freesansbold.ttf', 15)
 screen = pygame.display.set_mode([800, 600])
@@ -191,26 +183,16 @@ class Sprite (pygame.sprite.Sprite):
       pygame.draw.rect(screen, (255,0,0), self.hitbox,2) # To draw the hit box around the player
     
     def hit(self):
-      #atwizard = False
+      
       pygame.draw.rect(screen, WHITE, (0, 350, 800, 600))
       first_text = game_font.render(self.toptext, True, BLUE)
       second_text= game_font.render(self.bottomtext, True, BLUE)
       screen.blit (first_text, (20, 400))
       screen.blit (second_text, (20, 450))
-      #caveoneWall = globals () ['caveoneWall']
-      #if self.toptext == wizardwords and atwizard == False and len(walls) == 9:
+     
+      
       if self.toptext == wizardwords:
-        atwizard = False
-        #screen.fill(PINK)
-        #caveoneWall.pop(len(caveoneWall) - 1) #--> not working, says the index is out of range
-        #caveoneWall.pop(0)
-        ##walls[8] = [0, 350, 800, 20, RED]
-        ##screen.fill(YELLOW)
-        
-        
-        ##atwizard = True
-        #while len(caveoneWall) >= 9:
-          #caveoneWall.remove([0, 350, 800, 20, GREEN])
+        atwizard = True
       
       ##Trying to make minigame appear when play touches the sprite and presses space
       for event in pygame.event.get():
@@ -235,23 +217,6 @@ class Sprite (pygame.sprite.Sprite):
           if event.key == pygame.K_DOWN:
             player.changespeed(0, -5)
 
-        """if event.key == pygame.K_SPACE:
-          if self.toptext == charatext:
-            pong_game()"""
-            ##name 'pong_game' is not defined
-            
-          
-        
-      """if self.toptext == wizardwords: 
-        #screen.fill(YELLOW)
-        while len(caveoneWall) >= 8:
-          screen.fill(YELLOW)
-          ##caveoneWall.pop(8)"""
-      """while len(caveoneWall) >= 9:
-        ##screen.fill(BLUE)
-        if self.toptext == wizardwords: 
-          screen.fill(YELLOW)
-          caveoneWall.pop(8)"""
         
       
       
@@ -259,6 +224,9 @@ class Sprite (pygame.sprite.Sprite):
       if playery < self.hitbox[1] + self.hitbox[3] and playery + player3 > self.hitbox[1]:
         if playerx + player2 > self.hitbox[0] and playerx < self.hitbox[0] + self.hitbox[2]:
           self.hit()
+          global atwizard
+          atwizard = True
+          
           
  
 class Player(pygame.sprite.Sprite):
@@ -455,14 +423,14 @@ class Room_Cave1(Room): #walls done
                 [20, 580, 350, 20, RED], #bottom open right
                 [20, 580, 420, 20, RED], #bottom open right
                 [0, 350, 800, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
-                ]  #newcaveoneWall
+                ]  
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
             
-    global sprites1        
-    sprites1 = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
+    ##global sprites1        
+    ##sprites1 = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
     
     def draw (self):
         objects = [[200, 200, 40, 60, BLUE, "text here", "wow, this works!!"]] 
@@ -472,8 +440,8 @@ class Room_Cave1(Room): #walls done
             game_object.draw_hitbox(item[0], item[1], item[2], item[3])
             game_object.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3]) 
             
-        #sprites = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
-        for item in sprites1:
+        sprites = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
+        for item in sprites:
             npc_Sprite = Sprite(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
             self.chara_sprites.add(npc_Sprite) 
             npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
@@ -491,11 +459,9 @@ class Room_replace_Cave1(Room): #walls done
                 [780, 350, 20, 250, RED], #right open bottom
                 [20, 0, 350, 20, RED], #top open left
                 [20, 0, 420, 20, RED], #top open right
-                [20, 580, 350, 20, RED], #bottom open right
-                [20, 580, 420, 20, RED], #bottom open right
-                #[20, 580, 760, 20, GREEN], ###WALL WILL GO AWAY AFTER WIZARD
-                ]  #newcaveoneWall
- 
+                [20, 580, 760, 20, RED], #bottom open right
+               ]
+               
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
@@ -791,6 +757,99 @@ class Room_WorldSix (Room):
           npc_Sprite.draw_hitbox(item[0], item[1], item[2], item[3])
           npc_Sprite.hit_hitbox(player.hitbox[0], player.hitbox[1], player.hitbox[2], player.hitbox[3])    
 
+class Mini_game1 (Room):
+  """This creates all the walls in room 3"""
+  def __init__(self):
+    super().__init__()
+    
+    
+    
+    def message(msg, color):
+      mesg = game_font.render(msg, True, color)
+      screen.blit(mesg, [dis_width/3, dis_height/3])
+   
+ 
+  def gameLoop():  # creating a function
+      game_over = False
+      game_close = False
+      snakeclock = pygame.time.Clock()
+   
+      x1 = 800 / 2
+      y1 = 600 / 2
+      dis_width = 800
+      dis_height = 600
+      snake_block= 30
+   
+      x1_change = 0
+      y1_change = 0
+   
+      foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+      foody = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+   
+      while not game_over:
+   
+          while game_close == True:
+              screen.fill(WHITE)
+              
+              
+              largeText = pygame.font.SysFont("comicsansms",50)
+              TextSurf, TextRect = text_objects("You Lost! Press Q to play again", largeText)
+              TextRect.center = ((800/2),200)
+              screen.blit(TextSurf, TextRect)
+              #message("You Lost! Press Q-Quit or C-Play Again", RED)
+              pygame.display.update()
+              
+              
+              
+              for event in pygame.event.get():
+                  if event.type == pygame.KEYDOWN:
+                      if event.key == pygame.K_q:
+                          game_over = True
+                          game_close = False
+                      ##if event.key == pygame.K_c:
+                          ##gameLoop()
+   
+          for event in pygame.event.get():
+              if event.type == pygame.QUIT:
+                  game_over = True
+              if event.type == pygame.KEYDOWN:
+                  if event.key == pygame.K_LEFT:
+                      x1_change = -snake_block
+                      y1_change = 0
+                  elif event.key == pygame.K_RIGHT:
+                      x1_change = snake_block
+                      y1_change = 0
+                  elif event.key == pygame.K_UP:
+                      y1_change = -snake_block
+                      x1_change = 0
+                  elif event.key == pygame.K_DOWN:
+                      y1_change = snake_block
+                      x1_change = 0
+   
+          if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
+              game_close = True
+   
+          x1 += x1_change
+          y1 += y1_change
+          screen.fill(WHITE)
+          pygame.draw.rect(screen, BLUE, [foodx, foody, snake_block, snake_block])
+          pygame.draw.rect(screen, BLACK, [x1, y1, snake_block, snake_block])
+          pygame.display.update()
+   
+          if x1 >= foodx and x1 <= foodx + snake_block and y1 >= foody and y1 <= foody + snake_block:
+              global score
+              print(score)
+              score+=1
+          snakeclock.tick(10)
+          
+          if score >= 5:
+            #game_over = False
+            #game_close = True
+            game_over == True 
+            #get the minigame to close out
+            #get it to create new room after visiting all the sprites
+          
+        
                  
 def main_game():
     """ Main Program """
@@ -881,11 +940,9 @@ def main_game():
                     player.changespeed(0, -5)
  
  
-        if current_room == 1 and sprites1[0][5] == wizardwords:
-          room.pop(1)
-          room.insert(1, Room_replace_Cave1())
-          ##room[1] = Room_replace_Cave1()
-          screen.fill(YELLOW)
+        if current_room_no == 1 and atwizard:
+          current_room = Room_replace_Cave1()
+          Mini_game1.gameLoop()
           
           
         # --- Game Logic ---
@@ -1009,17 +1066,10 @@ def main_game():
         elif current_room_no == 9: #world six
           screen.fill(BLACK)
         
-        ###Figure out how to take away wall after talking to wizard
-
-        
-        
-        
-        """if hit.first_text == wizardwords: 
-          screen.fill(YELLOW)
-          ##cave1.sprites.pop(8)"""
         
         current_room.wall_list.draw(screen)
         current_room.object_list.draw(screen)
+        current_room.chara_sprites.draw(screen)
         movingsprites.draw(screen)
         player.draw_hitbox(player.rect.x, player.rect.y)
         current_room.draw()
@@ -1034,4 +1084,5 @@ def main_game():
  
 if __name__ == "__main__":
   main()
+
 
