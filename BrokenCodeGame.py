@@ -36,7 +36,7 @@ global atwizard
 atwizard = False
 
 global score
-score = 1
+score = 0
 
 game_font=pygame.font.Font('freesansbold.ttf', 15)
 screen = pygame.display.set_mode([800, 600])
@@ -429,8 +429,6 @@ class Room_Cave1(Room): #walls done
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
             
-    ##global sprites1        
-    ##sprites1 = [[200, 450, 50, 50, PEACH, wizardwords, "Hello!!"]]
     
     def draw (self):
         objects = [[200, 200, 40, 60, BLUE, "text here", "wow, this works!!"]] 
@@ -762,52 +760,73 @@ class Mini_game1 (Room):
   def __init__(self):
     super().__init__()
     
-    
-    
-    def message(msg, color):
-      mesg = game_font.render(msg, True, color)
-      screen.blit(mesg, [dis_width/3, dis_height/3])
+    white = (255, 255, 255)
+    yellow = (255, 255, 102)
+    black = (0, 0, 0)
+    red = (213, 50, 80)
+    green = (0, 255, 0)
+    blue = (50, 153, 213)
+     
+    dis_width = 600
+    dis_height = 400
+     
+    dis = pygame.display.set_mode((dis_width, dis_height))
+    #pygame.display.set_caption('Snake Game by Edureka')
+     
+    clock = pygame.time.Clock()
+     
+    snake_block = 10
+    snake_speed = 15
+     
+    font_style = pygame.font.SysFont("bahnschrift", 25)
+    score_font = pygame.font.SysFont("comicsansms", 35)
+     
+     
+    def Your_score(score):
+      value = score_font.render("Your Score: " + str(score), True, yellow)
+      dis.blit(value, [0, 0])
+     
+    def our_snake(snake_block, snake_list):
+      for x in snake_list:
+          pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
    
- 
-  def gameLoop():  # creating a function
+   
+    def message(msg, color):
+      mesg = font_style.render(msg, True, color)
+      dis.blit(mesg, [dis_width / 6, dis_height / 3])
+   
+     
+    def gameLoop():
       game_over = False
       game_close = False
-      snakeclock = pygame.time.Clock()
    
-      x1 = 800 / 2
-      y1 = 600 / 2
-      dis_width = 800
-      dis_height = 600
-      snake_block= 30
+      x1 = dis_width / 2
+      y1 = dis_height / 2
    
       x1_change = 0
       y1_change = 0
    
+      snake_List = []
+      Length_of_snake = 1
+   
       foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-      foody = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+      foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
    
       while not game_over:
    
           while game_close == True:
-              screen.fill(WHITE)
-              
-              
-              largeText = pygame.font.SysFont("comicsansms",50)
-              TextSurf, TextRect = text_objects("You Lost! Press Q to play again", largeText)
-              TextRect.center = ((800/2),200)
-              screen.blit(TextSurf, TextRect)
-              #message("You Lost! Press Q-Quit or C-Play Again", RED)
+              dis.fill(blue)
+              message("You Lost! Press C-Play Again or Q-Quit", red)
+              Your_score(Length_of_snake - 1)
               pygame.display.update()
-              
-              
-              
+   
               for event in pygame.event.get():
                   if event.type == pygame.KEYDOWN:
                       if event.key == pygame.K_q:
                           game_over = True
                           game_close = False
-                      ##if event.key == pygame.K_c:
-                          ##gameLoop()
+                      if event.key == pygame.K_c:
+                          gameLoop()
    
           for event in pygame.event.get():
               if event.type == pygame.QUIT:
@@ -828,29 +847,34 @@ class Mini_game1 (Room):
    
           if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
               game_close = True
-   
           x1 += x1_change
           y1 += y1_change
-          screen.fill(WHITE)
-          pygame.draw.rect(screen, BLUE, [foodx, foody, snake_block, snake_block])
-          pygame.draw.rect(screen, BLACK, [x1, y1, snake_block, snake_block])
+          dis.fill(blue)
+          pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+          snake_Head = []
+          snake_Head.append(x1)
+          snake_Head.append(y1)
+          snake_List.append(snake_Head)
+          if len(snake_List) > Length_of_snake:
+              del snake_List[0]
+   
+          for x in snake_List[:-1]:
+              if x == snake_Head:
+                  game_close = True
+   
+          our_snake(snake_block, snake_List)
+          Your_score(Length_of_snake - 1)
+   
           pygame.display.update()
    
-          if x1 >= foodx and x1 <= foodx + snake_block and y1 >= foody and y1 <= foody + snake_block:
-              global score
-              print(score)
-              score+=1
-          snakeclock.tick(10)
+          if x1 == foodx and y1 == foody:
+              foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+              foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+              Length_of_snake += 1
+   
+          clock.tick(snake_speed)
+              
           
-          if score >= 5:
-            #game_over = False
-            #game_close = True
-            game_over == True 
-            #get the minigame to close out
-            #get it to create new room after visiting all the sprites
-          
-        
-                 
 def main_game():
     """ Main Program """
  
@@ -940,9 +964,9 @@ def main_game():
                     player.changespeed(0, -5)
  
  
-        if current_room_no == 1 and atwizard:
-          current_room = Room_replace_Cave1()
-          Mini_game1.gameLoop()
+          
+          
+            
           
           
         # --- Game Logic ---
@@ -1038,8 +1062,14 @@ def main_game():
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.y = 60
+                
+        global atwizard
+        if current_room_no == 1 and atwizard:
+          #atwizard = False #somehow change the wizard
+          current_room = Room_replace_Cave1()
+          Mini_game1.gameLoop()
+          
          # --- Drawing ---
-        #screen.fill(BLACK)
         ## Change this to different backgrounds eventually
         if current_room_no == 0: #bedroom
           screen.fill(BLACK)
@@ -1084,5 +1114,12 @@ def main_game():
  
 if __name__ == "__main__":
   main()
+
+
+
+
+
+
+
 
 
