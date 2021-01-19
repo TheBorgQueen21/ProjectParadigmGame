@@ -879,9 +879,10 @@ class Mini_game1 (Room):
             foody = round(random.randrange(0, 600 - snake_block) / 10.0) * 10.0
             Length_of_snake += 1
  
-        if Length_of_snake - 1 == 2:
+        if Length_of_snake - 1 == 2: #when score is equal to 2
           game_over = True
           game_close = True
+          
         
         clock.tick(snake_speed)
     pygame.quit()
@@ -1081,8 +1082,7 @@ def main_game():
           #atwizard = False #somehow change the wizard
           current_room = Room_replace_Cave1()
           gameLoop()
-          player.rect.x = 790
-          player.rect.y = 60
+          
           
          # --- Drawing ---
         ## Change this to different backgrounds eventually
